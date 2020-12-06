@@ -11,6 +11,15 @@
         "format": "npx prettier --write \"**/*.{js,jsx,json,ts,tsx}\"",
         "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\""
     },
+    "husky": {
+        "hooks": {
+            "pre-commit": "npm run typecheck && lint-staged"
+        }
+    },
+    "lint-staged": {
+        "src/**/*.{js,jsx,ts,tsx}": "eslint",
+        "**/*.{js,jsx,json,ts,tsx}": "prettier --write"
+    },
     "dependencies": {
         "expo": "~39.0.2",
         "expo-status-bar": "~1.0.2",
@@ -29,6 +38,9 @@
         "eslint": "^7.15.0",
         "eslint-config-prettier": "^7.0.0",
         "eslint-plugin-react": "^7.21.5",
+        "husky": "^4.3.4",
+        "lint-staged": "^10.5.3",
+        "prettier": "2.2.1",
         "typescript": "~3.9.5"
     },
     "private": true
