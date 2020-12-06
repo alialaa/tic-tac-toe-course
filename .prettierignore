@@ -1,0 +1,4 @@
+node-modules
+.expo
+.expo-shared
+package-lock.json
