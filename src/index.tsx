@@ -1,14 +1,23 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
-import { Game, Home } from "@screens";
+import { StyleSheet, Text, View } from "react-native";
+import {
+    useFonts,
+    DeliusUnicase_400Regular,
+    DeliusUnicase_700Bold
+} from "@expo-google-fonts/delius-unicase";
+import { AppLoading } from "expo";
 
 export default function App() {
+    const [fontLoaded] = useFonts({
+        DeliusUnicase_400Regular,
+        DeliusUnicase_700Bold
+    });
+    if (!fontLoaded) return <AppLoading />;
     return (
         <View style={styles.container}>
-            <Image source={require("../assets/icon.png")} />
-            <Home />
-            <Game />
+            <Text style={{ fontSize: 25, fontFamily: "DeliusUnicase_400Regular" }}>
+                Hello World
+            </Text>
         </View>
     );
 }
