@@ -1,10 +1,14 @@
 import React, { ReactElement } from "react";
-import { Text, SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native";
 import { GradientBackground } from "@Components";
 import styles from "./single-player-game.styles";
 import { Board } from "@Components";
+import { printFormattedBoard, BoardState } from "@utils";
 
 export default function Game(): ReactElement {
+    const b: BoardState = ["x", "o", "x", "x", "o", null, "x", "o", null];
+
+    printFormattedBoard(b);
     return (
         <GradientBackground>
             <SafeAreaView style={styles.container}>
@@ -12,7 +16,7 @@ export default function Game(): ReactElement {
                     onCellPressed={index => {
                         alert(index);
                     }}
-                    state={["x", "o", "x", "x", "o", null, "x", "o", null]}
+                    state={b}
                     size={300}
                 />
             </SafeAreaView>
