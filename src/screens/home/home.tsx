@@ -19,12 +19,12 @@ export default function Home({ navigation }: HomeProps): ReactElement {
                         onPress={() => {
                             navigation.navigate("SinglePlayerGame");
                         }}
-                        style={styles.buttons}
+                        style={styles.button}
                         title="Single Player"
                     />
-                    <Button style={styles.buttons} title="Multiplayer" />
-                    <Button style={styles.buttons} title="Login" />
-                    <Button style={styles.buttons} title="Settings" />
+                    <Button style={styles.button} title="Multiplayer" />
+                    <Button style={styles.button} title="Login" />
+                    <Button style={styles.button} title="Settings" />
                 </View>
             </ScrollView>
         </GradientBackground>
