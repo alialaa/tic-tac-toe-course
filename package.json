@@ -37,7 +37,9 @@
         "react-native-screens": "~2.10.1",
         "react-native-web": "~0.13.12",
         "react-navigation": "^1.0.0-beta.11",
-        "expo-linear-gradient": "~8.3.0"
+        "expo-linear-gradient": "~8.3.0",
+        "expo-av": "~8.6.0",
+        "expo-haptics": "~8.3.0"
     },
     "devDependencies": {
         "@babel/core": "~7.9.0",
