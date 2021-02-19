@@ -16,7 +16,7 @@ import {
 export default function Game(): ReactElement {
     // prettier-ignore
     const [state, setState] = useState<BoardState>([
-        null, "x", null,
+        null, null, null,
         "o", null, "x",
         "o", "o", "x"
     ])

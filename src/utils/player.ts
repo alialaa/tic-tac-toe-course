@@ -6,6 +6,15 @@ export const getBestMove = (
     maximizing: boolean,
     depth = 0
 ): number => {
+
+    const childValues: { [key: string]: string } = {};
+    
+const getBestMoveRecursive = (
+    state: BoardState,
+    maximizing: boolean,
+    depth = 0
+): number => {
+
         const terminalObject = isTerminal(state);
         if (terminalObject) {
             if (terminalObject.winner === "x") {
@@ -23,11 +32,22 @@ export const getBestMove = (
                 child[index] = "x";
                 console.log(`Child board (x turn) (depth: ${depth})`);
                 printFormattedBoard(child);
-                const childValue = getBestMove(child, false, depth + 1);
+                const childValue = getBestMoveRecursive(child, false, depth + 1);
                 console.log("childValue", childValue);
-                best = Math.max(best, childValue); 
+                best = Math.max(best, childValue);
+                if (depth === 0) {
+                    childValues[childValue] = childValues[childValue]
+                        ? `${childValues[childValue]},${index}`
+                        : `${index}`;
+                }
         });
         console.log("best", best);
+        console.log("childValues", childValues);
+        if( depth === 0){
+            const arr = childValues[best].split(",");
+            const rand = Math.floor(Math.random() * arr.length);
+            return parseInt(arr[rand]);
+        }
         return best;
     }
     if (!maximizing) {
@@ -37,11 +57,24 @@ export const getBestMove = (
             child[index] = "o";
             console.log(`Child board (o turn) (depth: ${depth})`);
             printFormattedBoard(child);
-            const childValue = getBestMove(child, true, depth + 1);
+            const childValue = getBestMoveRecursive(child, true, depth + 1);
             console.log("childValue", childValue);
             best = Math.min(best, childValue); 
+            if (depth === 0) {
+                childValues[childValue] = childValues[childValue]
+                    ? `${childValues[childValue]},${index}`
+                    : `${index}`;
+            }
         });
         console.log("best", best);
+        console.log("childValues", childValues);
+        if( depth === 0){
+            const arr = childValues[best].split(",");
+            const rand = Math.floor(Math.random() * arr.length);
+            return parseInt(arr[rand]);
+        }
         return best;    
     }
+};
+        return getBestMoveRecursive(state, maximizing, depth);
 };
