@@ -16,6 +16,13 @@ export default function Game(): ReactElement {
     ]);
     const [turn, setTurn] = useState<"HUMAN" | "BOT">(Math.random() < 0.5 ? "HUMAN" : "BOT");
     const [isHumanMaximizing, setIsHumanMaximizing] = useState<boolean>(true);
+
+    const [gamesCount, setGamesCount] = useState({
+        wins: 0,
+        losses: 0,
+        draws: 0
+    });
+
     const playSound = useSounds();
 
     const gameResult = isTerminal(state);
@@ -48,20 +55,25 @@ export default function Game(): ReactElement {
         return "DRAW";
     };
 
+    const newGame = () => {
+        setState([null, null, null, null, null, null, null, null, null]);
+        setTurn(Math.random() < 0.5 ? "HUMAN" : "BOT");
+    };
+
     useEffect(() => {
         if (gameResult) {
             const winner = getWinner(gameResult.winner);
             if (winner === "HUMAN") {
                 playSound("win");
-                alert("You Won");
+                setGamesCount({ ...gamesCount, wins: gamesCount.wins + 1 });
             }
             if (winner === "BOT") {
                 playSound("loss");
-                alert("You Lost!");
+                setGamesCount({ ...gamesCount, losses: gamesCount.losses + 1 });
             }
             if (winner === "DRAW") {
                 playSound("draw");
-                alert("It's a Draw!");
+                setGamesCount({ ...gamesCount, draws: gamesCount.draws + 1 });
             }
         } else {
             if (turn === "BOT") {
@@ -73,7 +85,7 @@ export default function Game(): ReactElement {
                     setIsHumanMaximizing(false);
                     setTurn("HUMAN");
                 } else {
-                    const best = getBestMove(state, !isHumanMaximizing, 0, -1);
+                    const best = getBestMove(state, !isHumanMaximizing, 0, 1);
                     insertCell(best, isHumanMaximizing ? "o" : "x");
                     setTurn("HUMAN");
                 }
@@ -89,15 +101,15 @@ export default function Game(): ReactElement {
                     <View style={styles.results}>
                         <View style={styles.resultsBox}>
                             <Text style={styles.resultsTitle}>Wins</Text>
-                            <Text style={styles.resultsCount}>0</Text>
+                            <Text style={styles.resultsCount}>{gamesCount.wins}</Text>
                         </View>
                         <View style={styles.resultsBox}>
                             <Text style={styles.resultsTitle}>Draws</Text>
-                            <Text style={styles.resultsCount}>0</Text>
+                            <Text style={styles.resultsCount}>{gamesCount.draws}</Text>
                         </View>
                         <View style={styles.resultsBox}>
                             <Text style={styles.resultsTitle}>Losses</Text>
-                            <Text style={styles.resultsCount}>0</Text>
+                            <Text style={styles.resultsCount}>{gamesCount.losses}</Text>
                         </View>
                     </View>
                 </View>
@@ -110,10 +122,21 @@ export default function Game(): ReactElement {
                     gameResult={gameResult}
                     size={SCREEN_WIDTH - 60}
                 />
-                <View style={styles.modal}>
-                    <Text style={styles.modalText}>You Won</Text>
-                    <Button title="Play Again" />
-                </View>
+                {gameResult && (
+                    <View style={styles.modal}>
+                        <Text style={styles.modalText}>
+                            {getWinner(gameResult.winner) === "HUMAN" && "You Won"}
+                            {getWinner(gameResult.winner) === "BOT" && "You Lost"}
+                            {getWinner(gameResult.winner) === "DRAW" && "It's a Draw"}
+                        </Text>
+                        <Button
+                            onPress={() => {
+                                newGame();
+                            }}
+                            title="Play Again"
+                        />
+                    </View>
+                )}
             </SafeAreaView>
         </GradientBackground>
     );
