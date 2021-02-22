@@ -57,7 +57,7 @@ export default function Board({
             {true && (
                 <BoardLine
                     size={size}
-                    gameResult={{ winner: "o", diagonal: "COUNTER", direction: "D" }}
+                    gameResult={{ winner: "o", diagonal: "MAIN", direction: "D" }}
                 />
             )}
         </View>
