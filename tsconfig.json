@@ -9,6 +9,7 @@
         "resolveJsonModule": true,
         "strict": true,
         "baseUrl": ".",
+        "allowJs": true,
         "paths": {
             "@screens": ["src/screens"],
             "@Components": ["src/components"],

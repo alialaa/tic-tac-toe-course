@@ -23,7 +23,13 @@ export default function Home({ navigation }: HomeProps): ReactElement {
                         title="Single Player"
                     />
                     <Button style={styles.button} title="Multiplayer" />
-                    <Button style={styles.button} title="Login" />
+                    <Button
+                        onPress={() => {
+                            navigation.navigate("Login");
+                        }}
+                        style={styles.button}
+                        title="Login"
+                    />
                     <Button
                         onPress={() => {
                             navigation.navigate("Settings");
