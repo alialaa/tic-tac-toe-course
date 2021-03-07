@@ -2,10 +2,7 @@ import React, {
     ReactElement,
     ReactNode,
     useState,
-    useEffect,
-    createContext,
-    Dispatch,
-    SetStateAction
+    useEffect
 } from "react";
 import {
     useFonts,
@@ -14,17 +11,11 @@ import {
 } from "@expo-google-fonts/delius-unicase";
 import { AppLoading } from "expo";
 import { Auth } from "aws-amplify";
+import { useAuth } from "@contexts/auth-context";
 
 type AppBootstrapProps = {
     children: ReactNode;
 };
-
-type AuthContextType = {
-    user: { [key: string]: any } | null;
-    setUser: Dispatch<SetStateAction<{ [key: string]: any } | null>>;
-};
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export default function AppBootstrap({ children }: AppBootstrapProps): ReactElement {
     const [fontLoaded] = useFonts({
@@ -32,7 +23,7 @@ export default function AppBootstrap({ children }: AppBootstrapProps): ReactElem
         DeliusUnicase_700Bold
     });
     const [authLoaded, setAuthLoaded] = useState(false);
-    const [user, setUser] = useState<{ [key: string]: any } | null>(null);
+    const {setUser} = useAuth();
 
     useEffect(() => {
         async function checkCurrentUser() {
@@ -48,14 +39,10 @@ export default function AppBootstrap({ children }: AppBootstrapProps): ReactElem
         checkCurrentUser();
     }, []);
     return fontLoaded && authLoaded ? (
-        <AuthContext.Provider
-            value={{
-                user,
-                setUser
-            }}
-        >
+        <>
             {children}
-        </AuthContext.Provider>
+            </>
+       
     ) : (
         <AppLoading />
     );
