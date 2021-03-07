@@ -8,8 +8,8 @@ import { Value } from "react-native-reanimated";
 export default function Login(): ReactElement {
     const passwordRef = useRef<NativeTextInput | null>(null);
     const [form, setForm] = useState({
-        username: "",
-        password: ""
+        username: "test",
+        password: "12345678"
     });
     const [loading, setLoading] = useState(false);
     const setFormInput = (key: keyof typeof form, Value: string) => {
