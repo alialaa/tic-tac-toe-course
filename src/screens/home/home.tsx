@@ -1,17 +1,19 @@
-import React, { Component, ReactElement } from "react";
-import { View, ScrollView, Image } from "react-native";
+import React, { Component, ReactElement, useState } from "react";
+import { View, ScrollView, Image, Alert } from "react-native";
 import styles from "./home.styles";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StackNavigatorParams } from "@config/navigator";
 import { GradientBackground, Button, Text } from "@Components";
 import { useAuth } from "@contexts/auth-context";
+import { Auth } from "aws-amplify";
 
 type HomeProps = {
     navigation: StackNavigationProp<StackNavigatorParams, "Home">;
 };
 
 export default function Home({ navigation }: HomeProps): ReactElement {
-    const {user} = useAuth();
+    const { user } = useAuth();
+    const [signingOut, setSigningOut] = useState(false);
     return (
         <GradientBackground>
             <ScrollView contentContainerStyle={styles.container}>
@@ -26,16 +28,22 @@ export default function Home({ navigation }: HomeProps): ReactElement {
                     />
                     <Button style={styles.button} title="Multiplayer" />
                     <Button
-                        onPress={() => {
-                            if(user){
-
+                        loading={signingOut}
+                        onPress={async () => {
+                            if (user) {
+                                setSigningOut(true);
+                                try {
+                                    await Auth.signOut();
+                                } catch (error) {
+                                    Alert.alert("Error!", "Error signing out!");
+                                }
+                                setSigningOut(false);
                             } else {
-                                navigation.navigate("Login");    
+                                navigation.navigate("Login");
                             }
-                            
                         }}
                         style={styles.button}
-                        title={user ? "Logout": "Login"}
+                        title={user ? "Logout" : "Login"}
                     />
                     <Button
                         onPress={() => {
@@ -45,11 +53,11 @@ export default function Home({ navigation }: HomeProps): ReactElement {
                         title="Settings"
                     />
 
-                    {user && 
+                    {user && (
                         <Text weight="400" style={styles.loggedInText}>
-                            Logged in as <Text weight="700">{ user.username }</Text>
+                            Logged in as <Text weight="700">{user.username}</Text>
                         </Text>
-                    }
+                    )}
                 </View>
             </ScrollView>
         </GradientBackground>
