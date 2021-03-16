@@ -1,6 +1,6 @@
 import React, { ReactElement, useRef, useState } from "react";
 import { ScrollView, TextInput as NativeTextInput, Alert, TouchableOpacity } from "react-native";
-import { GradientBackground, TextInput, Button, Text } from "@Components";
+import { GradientBackground, TextInput, Button, Text } from "@components";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StackNavigatorParams } from "@config/navigator";
 import { Auth } from "aws-amplify";

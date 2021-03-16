@@ -1,9 +1,26 @@
+import { colors } from "@utils";
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 30,
         paddingVertical: 40
+    },
+    otpInputBox: {
+        color: colors.lightGreen,
+        fontFamily: "DeliusUnicase_400Regular",
+        fontSize: 20,
+        borderWidth: 0,
+        backgroundColor: colors.purple,
+        borderBottomWidth: 1,
+        borderColor: colors.lightGreen
+    },
+    otpActiveInputBox: {
+        borderWidth: 1,
+        borderColor: colors.lightPurple
+    },
+    otpText: {
+        color: colors.lightGreen
     }
 });
 

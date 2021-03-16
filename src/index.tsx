@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { AppBootstrap } from "@Components";
+import { AppBootstrap } from "@components";
 import Navigator from "@config/navigator";
 import { SettingsProvider } from "@contexts/settings-context";
 import Amplify from "aws-amplify";
@@ -10,11 +10,11 @@ Amplify.configure(config);
 export default function App(): ReactElement {
     return (
         <AuthProvider>
-        <AppBootstrap>
-            <SettingsProvider>
-                <Navigator />
-            </SettingsProvider>
-        </AppBootstrap>
+            <AppBootstrap>
+                <SettingsProvider>
+                    <Navigator />
+                </SettingsProvider>
+            </AppBootstrap>
         </AuthProvider>
     );
 }

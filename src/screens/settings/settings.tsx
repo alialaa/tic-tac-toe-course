@@ -1,13 +1,13 @@
 import React, { ReactElement } from "react";
 import { ScrollView, View, TouchableOpacity, Switch } from "react-native";
-import { GradientBackground, Text } from "@Components";
+import { GradientBackground, Text } from "@components";
 import styles from "./settings.styles";
 import { colors } from "@utils";
 import { difficulties, useSettings } from "@contexts/settings-context";
 
 export default function Settings(): ReactElement | null {
     const { settings, saveSetting } = useSettings();
-   
+
     if (!settings) return null;
     return (
         <GradientBackground>
@@ -85,7 +85,6 @@ export default function Settings(): ReactElement | null {
                         }}
                     />
                 </View>
-              
             </ScrollView>
         </GradientBackground>
     );

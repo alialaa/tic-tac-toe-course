@@ -3,7 +3,7 @@ import { View, ScrollView, Image, Alert } from "react-native";
 import styles from "./home.styles";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StackNavigatorParams } from "@config/navigator";
-import { GradientBackground, Button, Text } from "@Components";
+import { GradientBackground, Button, Text } from "@components";
 import { useAuth } from "@contexts/auth-context";
 import { Auth } from "aws-amplify";
 
