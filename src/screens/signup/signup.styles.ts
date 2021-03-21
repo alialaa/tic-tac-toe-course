@@ -1,5 +1,6 @@
 import { colors } from "@utils";
 import { StyleSheet } from "react-native";
+import { listTodos } from "src/graphql/queries";
 
 const styles = StyleSheet.create({
     container: {
@@ -21,6 +22,11 @@ const styles = StyleSheet.create({
     },
     otpText: {
         color: colors.lightGreen
+    },
+    resendLink: {
+        color: colors.lightGreen,
+        textAlign: "center",
+        textDecorationLine: "underline"
     }
 });
 

@@ -14,6 +14,7 @@ import { Auth } from "aws-amplify";
 import OTPInput from "@twotalltotems/react-native-otp-input";
 import styles from "./signup.styles";
 import { colors } from "@utils";
+import { TouchableOpacity } from "react-native-gesture-handler";
 type SignUpProps = {
     navigation: StackNavigationProp<StackNavigatorParams, "SignUp">;
 };
@@ -31,6 +32,7 @@ export default function SiginUp({ navigation }: SignUpProps): ReactElement {
     const [loading, setLoading] = useState(false);
     const [step, setStep] = useState<"signUp" | "otp">("signUp");
     const [confirming, setConfirming] = useState(false);
+    const [resending, setResending] = useState(false);
     const setFormInput = (key: keyof typeof form, Value: string) => {
         setForm({ ...form, [key]: Value });
     };
@@ -63,6 +65,16 @@ export default function SiginUp({ navigation }: SignUpProps): ReactElement {
         }
         setConfirming(false);
     };
+
+    const resendCode = async (username: string) => {
+        setResending(true);
+        try {
+            await Auth.resendSignUp(username);
+        } catch (error) {
+            Alert.alert("Error!", error.message || "An error has occured");
+        }
+        setResending(false);
+    };
     return (
         <GradientBackground>
             <KeyboardAvoidingView
@@ -79,16 +91,29 @@ export default function SiginUp({ navigation }: SignUpProps): ReactElement {
                             {confirming ? (
                                 <ActivityIndicator color={colors.lightGreen} />
                             ) : (
-                                <OTPInput
-                                    placeholderCharacter="0"
-                                    placeholderTextColor="#5d5379"
-                                    pinCount={6}
-                                    codeInputFieldStyle={styles.otpInputBox}
-                                    codeInputHighlightStyle={styles.otpActiveInputBox}
-                                    onCodeFilled={code => {
-                                        confirmCode(code);
-                                    }}
-                                />
+                                <>
+                                    <OTPInput
+                                        placeholderCharacter="0"
+                                        placeholderTextColor="#5d5379"
+                                        pinCount={6}
+                                        codeInputFieldStyle={styles.otpInputBox}
+                                        codeInputHighlightStyle={styles.otpActiveInputBox}
+                                        onCodeFilled={code => {
+                                            confirmCode(code);
+                                        }}
+                                    />
+                                    {resending ? (
+                                        <ActivityIndicator color={colors.lightGreen} />
+                                    ) : (
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                resendCode(form.username);
+                                            }}
+                                        >
+                                            <Text style={styles.resendLink}>Resend Code</Text>
+                                        </TouchableOpacity>
+                                    )}
+                                </>
                             )}
                         </>
                     )}
