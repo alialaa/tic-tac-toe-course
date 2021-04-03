@@ -1,4 +1,4 @@
-import React, { ReactElement, useRef, useState } from "react";
+import React, { ReactElement, useRef, useState, useEffect } from "react";
 import {
     ScrollView,
     TextInput as NativeTextInput,
@@ -8,6 +8,7 @@ import {
     ActivityIndicator
 } from "react-native";
 import { GradientBackground, TextInput, Button, Text } from "@components";
+import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp, useHeaderHeight } from "@react-navigation/stack";
 import { StackNavigatorParams } from "@config/navigator";
 import { Auth } from "aws-amplify";
@@ -17,8 +18,10 @@ import { colors } from "@utils";
 import { TouchableOpacity } from "react-native-gesture-handler";
 type SignUpProps = {
     navigation: StackNavigationProp<StackNavigatorParams, "SignUp">;
+    route: RouteProp<StackNavigatorParams, "SignUp">
 };
-export default function SiginUp({ navigation }: SignUpProps): ReactElement {
+export default function SiginUp({ navigation, route }: SignUpProps): ReactElement {
+    const unconfirmedUSername = route.params?.username;
     const headerHeight = useHeaderHeight();
     const passwordRef = useRef<NativeTextInput | null>(null);
     const emailRef = useRef<NativeTextInput | null>(null);
@@ -30,7 +33,7 @@ export default function SiginUp({ navigation }: SignUpProps): ReactElement {
         password: "12345678"
     });
     const [loading, setLoading] = useState(false);
-    const [step, setStep] = useState<"signUp" | "otp">("signUp");
+    const [step, setStep] = useState<"signUp" | "otp">( unconfirmedUSername ? "otp" : "signUp");
     const [confirming, setConfirming] = useState(false);
     const [resending, setResending] = useState(false);
     const setFormInput = (key: keyof typeof form, Value: string) => {
@@ -57,7 +60,7 @@ export default function SiginUp({ navigation }: SignUpProps): ReactElement {
     const confirmCode = async (code: string) => {
         setConfirming(true);
         try {
-            await Auth.confirmSignUp(form.username, code);
+            await Auth.confirmSignUp(form.username || unconfirmedUSername || "", code);
             navigation.navigate("Login");
             Alert.alert("Success", "You can now login with your account");
         } catch (error) {
@@ -73,8 +76,15 @@ export default function SiginUp({ navigation }: SignUpProps): ReactElement {
         } catch (error) {
             Alert.alert("Error!", error.message || "An error has occured");
         }
-        setResending(false);
+        setResending(false); 
     };
+
+    useEffect(() => {
+        if(unconfirmedUSername) {
+            resendCode(unconfirmedUSername);
+        }
+    }, [])
+
     return (
         <GradientBackground>
             <KeyboardAvoidingView
@@ -92,27 +102,33 @@ export default function SiginUp({ navigation }: SignUpProps): ReactElement {
                                 <ActivityIndicator color={colors.lightGreen} />
                             ) : (
                                 <>
-                                    <OTPInput
-                                        placeholderCharacter="0"
-                                        placeholderTextColor="#5d5379"
-                                        pinCount={6}
-                                        codeInputFieldStyle={styles.otpInputBox}
-                                        codeInputHighlightStyle={styles.otpActiveInputBox}
-                                        onCodeFilled={code => {
-                                            confirmCode(code);
-                                        }}
-                                    />
-                                    {resending ? (
-                                        <ActivityIndicator color={colors.lightGreen} />
-                                    ) : (
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                resendCode(form.username);
-                                            }}
-                                        >
-                                            <Text style={styles.resendLink}>Resend Code</Text>
-                                        </TouchableOpacity>
-                                    )}
+                                <OTPInput
+                                    style={{ height: 100 }}
+                                    placeholderCharacter="0"
+                                    placeholderTextColor="#5d5379"
+                                    pinCount={6}
+                                    codeInputFieldStyle={styles.otpInputBox}
+                                    codeInputHighlightStyle={styles.otpActiveInputBox}
+                                    onCodeFilled={code => {
+                                        confirmCode(code);
+                                    }}
+                                />
+                                {resending ? (<ActivityIndicator color= {
+                                    colors.lightGreen
+                                } />  ):( 
+                                <TouchableOpacity onPress = {()=>{
+                                    if(form.username) {
+                                        resendCode(form.username);
+                                    }
+                                    if(unconfirmedUSername){
+                                        resendCode(unconfirmedUSername);
+                                    }
+                                }}>
+                                    <Text style = {styles.resendLink}>
+                                        Resend Code
+                                    </Text>
+                                </TouchableOpacity>
+                            )}
                                 </>
                             )}
                         </>
