@@ -4,10 +4,19 @@ import { GradientBackground, Text } from "@components";
 import styles from "./settings.styles";
 import { colors } from "@utils";
 import { difficulties, useSettings } from "@contexts/settings-context";
+import { useAuth } from "@contexts/auth-context";
+import { StackNavigatorParams } from "@config/navigator";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-export default function Settings(): ReactElement | null {
+type SettingsScreenNavigationProp = StackNavigationProp<StackNavigatorParams, "Settings">;
+
+type SettingsProps = {
+    navigation: SettingsScreenNavigationProp;
+};
+
+export default function Settings({ navigation }: SettingsProps): ReactElement | null {
     const { settings, saveSetting } = useSettings();
-
+    const { user } = useAuth();
     if (!settings) return null;
     return (
         <GradientBackground>
@@ -85,6 +94,19 @@ export default function Settings(): ReactElement | null {
                         }}
                     />
                 </View>
+                {user && (
+                    <View style={[styles.field, styles.switchField]}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate("ChangePassword");
+                            }}
+                        >
+                            <Text style={[styles.label, { textDecorationLine: "underline" }]}>
+                                Change Password
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
             </ScrollView>
         </GradientBackground>
     );
