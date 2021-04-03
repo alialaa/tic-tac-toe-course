@@ -2,18 +2,21 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateTodoInput = {
+export type CreatePlayerInput = {
   id?: string | null,
+  cognitoID: string,
+  username: string,
   name: string,
-  description?: string | null,
+  email: string,
 };
 
-export type ModelTodoConditionInput = {
+export type ModelPlayerConditionInput = {
+  cognitoID?: ModelStringInput | null,
   name?: ModelStringInput | null,
-  description?: ModelStringInput | null,
-  and?: Array< ModelTodoConditionInput | null > | null,
-  or?: Array< ModelTodoConditionInput | null > | null,
-  not?: ModelTodoConditionInput | null,
+  email?: ModelStringInput | null,
+  and?: Array< ModelPlayerConditionInput | null > | null,
+  or?: Array< ModelPlayerConditionInput | null > | null,
+  not?: ModelPlayerConditionInput | null,
 };
 
 export type ModelStringInput = {
@@ -56,32 +59,38 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
-export type Todo = {
-  __typename: "Todo",
+export type Player = {
+  __typename: "Player",
   id?: string,
+  cognitoID?: string,
+  username?: string,
   name?: string,
-  description?: string | null,
+  email?: string,
   createdAt?: string,
   updatedAt?: string,
 };
 
-export type UpdateTodoInput = {
+export type UpdatePlayerInput = {
   id: string,
+  cognitoID?: string | null,
+  username: string,
   name?: string | null,
-  description?: string | null,
+  email?: string | null,
 };
 
-export type DeleteTodoInput = {
-  id?: string | null,
+export type DeletePlayerInput = {
+  username: string,
 };
 
-export type ModelTodoFilterInput = {
+export type ModelPlayerFilterInput = {
   id?: ModelIDInput | null,
+  cognitoID?: ModelStringInput | null,
+  username?: ModelStringInput | null,
   name?: ModelStringInput | null,
-  description?: ModelStringInput | null,
-  and?: Array< ModelTodoFilterInput | null > | null,
-  or?: Array< ModelTodoFilterInput | null > | null,
-  not?: ModelTodoFilterInput | null,
+  email?: ModelStringInput | null,
+  and?: Array< ModelPlayerFilterInput | null > | null,
+  or?: Array< ModelPlayerFilterInput | null > | null,
+  not?: ModelPlayerFilterInput | null,
 };
 
 export type ModelIDInput = {
@@ -100,89 +109,107 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
-export type ModelTodoConnection = {
-  __typename: "ModelTodoConnection",
-  items?:  Array<Todo | null > | null,
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
+export type ModelPlayerConnection = {
+  __typename: "ModelPlayerConnection",
+  items?:  Array<Player | null > | null,
   nextToken?: string | null,
 };
 
-export type CreateTodoMutationVariables = {
-  input?: CreateTodoInput,
-  condition?: ModelTodoConditionInput | null,
+export type CreatePlayerMutationVariables = {
+  input?: CreatePlayerInput,
+  condition?: ModelPlayerConditionInput | null,
 };
 
-export type CreateTodoMutation = {
-  createTodo?:  {
-    __typename: "Todo",
+export type CreatePlayerMutation = {
+  createPlayer?:  {
+    __typename: "Player",
     id: string,
+    cognitoID: string,
+    username: string,
     name: string,
-    description?: string | null,
+    email: string,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type UpdateTodoMutationVariables = {
-  input?: UpdateTodoInput,
-  condition?: ModelTodoConditionInput | null,
+export type UpdatePlayerMutationVariables = {
+  input?: UpdatePlayerInput,
+  condition?: ModelPlayerConditionInput | null,
 };
 
-export type UpdateTodoMutation = {
-  updateTodo?:  {
-    __typename: "Todo",
+export type UpdatePlayerMutation = {
+  updatePlayer?:  {
+    __typename: "Player",
     id: string,
+    cognitoID: string,
+    username: string,
     name: string,
-    description?: string | null,
+    email: string,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type DeleteTodoMutationVariables = {
-  input?: DeleteTodoInput,
-  condition?: ModelTodoConditionInput | null,
+export type DeletePlayerMutationVariables = {
+  input?: DeletePlayerInput,
+  condition?: ModelPlayerConditionInput | null,
 };
 
-export type DeleteTodoMutation = {
-  deleteTodo?:  {
-    __typename: "Todo",
+export type DeletePlayerMutation = {
+  deletePlayer?:  {
+    __typename: "Player",
     id: string,
+    cognitoID: string,
+    username: string,
     name: string,
-    description?: string | null,
+    email: string,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type GetTodoQueryVariables = {
-  id?: string,
+export type GetPlayerQueryVariables = {
+  username?: string,
 };
 
-export type GetTodoQuery = {
-  getTodo?:  {
-    __typename: "Todo",
+export type GetPlayerQuery = {
+  getPlayer?:  {
+    __typename: "Player",
     id: string,
+    cognitoID: string,
+    username: string,
     name: string,
-    description?: string | null,
+    email: string,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type ListTodosQueryVariables = {
-  filter?: ModelTodoFilterInput | null,
+export type ListPlayersQueryVariables = {
+  username?: string | null,
+  filter?: ModelPlayerFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
 };
 
-export type ListTodosQuery = {
-  listTodos?:  {
-    __typename: "ModelTodoConnection",
+export type ListPlayersQuery = {
+  listPlayers?:  {
+    __typename: "ModelPlayerConnection",
     items?:  Array< {
-      __typename: "Todo",
+      __typename: "Player",
       id: string,
+      cognitoID: string,
+      username: string,
       name: string,
-      description?: string | null,
+      email: string,
       createdAt: string,
       updatedAt: string,
     } | null > | null,
@@ -190,34 +217,40 @@ export type ListTodosQuery = {
   } | null,
 };
 
-export type OnCreateTodoSubscription = {
-  onCreateTodo?:  {
-    __typename: "Todo",
+export type OnCreatePlayerSubscription = {
+  onCreatePlayer?:  {
+    __typename: "Player",
     id: string,
+    cognitoID: string,
+    username: string,
     name: string,
-    description?: string | null,
+    email: string,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type OnUpdateTodoSubscription = {
-  onUpdateTodo?:  {
-    __typename: "Todo",
+export type OnUpdatePlayerSubscription = {
+  onUpdatePlayer?:  {
+    __typename: "Player",
     id: string,
+    cognitoID: string,
+    username: string,
     name: string,
-    description?: string | null,
+    email: string,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type OnDeleteTodoSubscription = {
-  onDeleteTodo?:  {
-    __typename: "Todo",
+export type OnDeletePlayerSubscription = {
+  onDeletePlayer?:  {
+    __typename: "Player",
     id: string,
+    cognitoID: string,
+    username: string,
     name: string,
-    description?: string | null,
+    email: string,
     createdAt: string,
     updatedAt: string,
   } | null,

@@ -1,5 +1,7 @@
-type Todo @model {
-  id: ID!
-  name: String!
-  description: String
+type Player @model @key(fields: ["username"]) {
+    id: ID!
+    cognitoID: String!
+    username: String!
+    name: String!
+    email: AWSEmail!
 }
