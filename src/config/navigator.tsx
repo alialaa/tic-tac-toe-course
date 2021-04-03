@@ -11,7 +11,7 @@ export type StackNavigatorParams = {
     Login: undefined;
     SignUp: { username: string } | undefined;
     ChangePassword: undefined;
-    ForgetPassword: undefined;
+    ForgotPassword: undefined;
 };
 
 const Stack = createStackNavigator<StackNavigatorParams>();
