@@ -1,4 +1,13 @@
-type Player @model @key(fields: ["username"]) {
+type Player
+    @model
+    @key(fields: ["username"])
+    @auth(
+        rules: [
+            { allow: private, operations: [read] }
+            { allow: owner, ownerField: "username", operations: [update] }
+            { allow: private, provider: iam, operations: [read, create, update, delete] }
+        ]
+    ) {
     id: ID!
     cognitoID: String!
     username: String!
