@@ -1,6 +1,5 @@
 import { colors } from "@utils";
 import { StyleSheet } from "react-native";
-import { listTodos } from "src/graphql/queries";
 
 const styles = StyleSheet.create({
     container: {
