@@ -18,7 +18,7 @@ import { colors } from "@utils";
 import { TouchableOpacity } from "react-native-gesture-handler";
 type SignUpProps = {
     navigation: StackNavigationProp<StackNavigatorParams, "SignUp">;
-    route: RouteProp<StackNavigatorParams, "SignUp">
+    route: RouteProp<StackNavigatorParams, "SignUp">;
 };
 export default function SiginUp({ navigation, route }: SignUpProps): ReactElement {
     const unconfirmedUSername = route.params?.username;
@@ -28,12 +28,12 @@ export default function SiginUp({ navigation, route }: SignUpProps): ReactElemen
     const nameRef = useRef<NativeTextInput | null>(null);
     const [form, setForm] = useState({
         username: "test",
-        email: "arnav.6@egzones.com",
+        email: "shabazz46@jwvestates.com",
         name: "Test Name",
         password: "12345678"
     });
     const [loading, setLoading] = useState(false);
-    const [step, setStep] = useState<"signUp" | "otp">( unconfirmedUSername ? "otp" : "signUp");
+    const [step, setStep] = useState<"signUp" | "otp">(unconfirmedUSername ? "otp" : "signUp");
     const [confirming, setConfirming] = useState(false);
     const [resending, setResending] = useState(false);
     const setFormInput = (key: keyof typeof form, Value: string) => {
@@ -76,14 +76,14 @@ export default function SiginUp({ navigation, route }: SignUpProps): ReactElemen
         } catch (error) {
             Alert.alert("Error!", error.message || "An error has occured");
         }
-        setResending(false); 
+        setResending(false);
     };
 
     useEffect(() => {
-        if(unconfirmedUSername) {
+        if (unconfirmedUSername) {
             resendCode(unconfirmedUSername);
         }
-    }, [])
+    }, []);
 
     return (
         <GradientBackground>
@@ -102,33 +102,33 @@ export default function SiginUp({ navigation, route }: SignUpProps): ReactElemen
                                 <ActivityIndicator color={colors.lightGreen} />
                             ) : (
                                 <>
-                                <OTPInput
-                                    style={{ height: 100 }}
-                                    placeholderCharacter="0"
-                                    placeholderTextColor="#5d5379"
-                                    pinCount={6}
-                                    codeInputFieldStyle={styles.otpInputBox}
-                                    codeInputHighlightStyle={styles.otpActiveInputBox}
-                                    onCodeFilled={code => {
-                                        confirmCode(code);
-                                    }}
-                                />
-                                {resending ? (<ActivityIndicator color= {
-                                    colors.lightGreen
-                                } />  ):( 
-                                <TouchableOpacity onPress = {()=>{
-                                    if(form.username) {
-                                        resendCode(form.username);
-                                    }
-                                    if(unconfirmedUSername){
-                                        resendCode(unconfirmedUSername);
-                                    }
-                                }}>
-                                    <Text style = {styles.resendLink}>
-                                        Resend Code
-                                    </Text>
-                                </TouchableOpacity>
-                            )}
+                                    <OTPInput
+                                        style={{ height: 100 }}
+                                        placeholderCharacter="0"
+                                        placeholderTextColor="#5d5379"
+                                        pinCount={6}
+                                        codeInputFieldStyle={styles.otpInputBox}
+                                        codeInputHighlightStyle={styles.otpActiveInputBox}
+                                        onCodeFilled={code => {
+                                            confirmCode(code);
+                                        }}
+                                    />
+                                    {resending ? (
+                                        <ActivityIndicator color={colors.lightGreen} />
+                                    ) : (
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                if (form.username) {
+                                                    resendCode(form.username);
+                                                }
+                                                if (unconfirmedUSername) {
+                                                    resendCode(unconfirmedUSername);
+                                                }
+                                            }}
+                                        >
+                                            <Text style={styles.resendLink}>Resend Code</Text>
+                                        </TouchableOpacity>
+                                    )}
                                 </>
                             )}
                         </>
