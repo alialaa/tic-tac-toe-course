@@ -6,9 +6,12 @@
 	REGION
 Amplify Params - DO NOT EDIT */
 
+const appsync = require("aws-amplify");
+const ggl = require("graphql-tag");
+require("cross-fetch/polyfill");
+
 exports.handler = async (event, context, callback) => {
-    console.log("env", process.env);
-    console.log("event", event);
-    console.log("context", context);
-    callback(null, event);
+    const graphqlClient = new appsync.AWSAppSyncClient({
+        url: 
+    })
 };
