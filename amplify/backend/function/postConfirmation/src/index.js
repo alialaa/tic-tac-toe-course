@@ -16,8 +16,8 @@ exports.handler = async (event, context, callback) => {
         region: process.env.REGION,
         auth: {
             type: "AWS_IAM",
-            Credentials: {
-                accessKeyID: process.env.AWS_ACCESS_KEY_ID,
+            credentials: {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
                 secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
                 sessionToken: process.env.AWS_SESSION_TOKEN
             }
@@ -44,7 +44,7 @@ exports.handler = async (event, context, callback) => {
             mutation,
             variables: {
                 name: event.request.userAttributes.name,
-                username: event.username,
+                username: event.userName,
                 cognitoID: event.request.userAttributes.sub,
                 email: event.request.userAttributes.email
             }

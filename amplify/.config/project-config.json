@@ -1,17 +1,15 @@
 {
-  "projectName": "ticTacToe",
-  "version": "3.0",
-  "frontend": "javascript",
-  "javascript": {
-    "framework": "react-native",
-    "config": {
-      "SourceDir": "./",
-      "DistributionDir": "./",
-      "BuildCommand": "npm.cmd run-script build",
-      "StartCommand": "npm.cmd run-script start"
-    }
-  },
-  "providers": [
-    "awscloudformation"
-  ]
+    "projectName": "ticTacToe",
+    "version": "3.1",
+    "frontend": "javascript",
+    "javascript": {
+        "framework": "react-native",
+        "config": {
+            "SourceDir": "./",
+            "DistributionDir": "./",
+            "BuildCommand": "npm.cmd run-script build",
+            "StartCommand": "npm.cmd run-script start"
+        }
+    },
+    "providers": ["awscloudformation"]
 }
