@@ -51,6 +51,22 @@
                     ]
                 }
             ]
+        },
+        "preAuth": {
+            "build": true,
+            "providerPlugin": "awscloudformation",
+            "service": "Lambda",
+            "dependsOn": [
+                {
+                    "category": "api",
+                    "resourceName": "tictactoe",
+                    "attributes": [
+                        "GraphQLAPIIdOutput",
+                        "GraphQLAPIEndpointOutput",
+                        "GraphQLAPIKeyOutput"
+                    ]
+                }
+            ]
         }
     }
 }
