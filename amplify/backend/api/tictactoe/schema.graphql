@@ -19,17 +19,30 @@ type Player
 type PlayerGame
     @model(queries: null)
     @key(name: "byGame", fields: ["gameID"])
-    @key(name: "byPlayer", fields: ["playerUsername", "createdAt"]) {
+    @key(name: "byPlayer", fields: ["playerUsername", "createdAt"])
+    @auth(
+        rules: [
+            { allow: owner, ownerField: "owners", operations: [read] }
+            { allow: private, provider: iam, operations: [read, create, update, delete] }
+        ]
+    ) {
     id: ID!
     createdAt: String!
     gameID: ID!
     playerUsername: String!
-    owner: [String!]!
+    owners: [String!]!
     game: Game! @connection(fields: ["gameID"])
     player: Player! @connection(fields: ["playerUsername"])
 }
 
-type Game @model {
+type Game
+    @model
+    @auth(
+        rules: [
+            { allow: owner, ownerField: "owners", operations: [read] }
+            { allow: private, provider: iam, operations: [read, create, update, delete] }
+        ]
+    ) {
     id: ID!
     status: GameStatus!
     owners: [String!]!
