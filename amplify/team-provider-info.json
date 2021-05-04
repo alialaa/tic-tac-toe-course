@@ -1,15 +1,15 @@
 {
     "dev": {
         "awscloudformation": {
-            "AuthRoleName": "amplify-tictactoe-dev-141019-authRole",
-            "UnauthRoleArn": "arn:aws:iam::882535348586:role/amplify-tictactoe-dev-141019-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::882535348586:role/amplify-tictactoe-dev-141019-authRole",
+            "AuthRoleName": "amplify-tictactoe-dev-110111-authRole",
+            "UnauthRoleArn": "arn:aws:iam::882535348586:role/amplify-tictactoe-dev-110111-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::882535348586:role/amplify-tictactoe-dev-110111-authRole",
             "Region": "eu-west-2",
-            "DeploymentBucketName": "amplify-tictactoe-dev-141019-deployment",
-            "UnauthRoleName": "amplify-tictactoe-dev-141019-unauthRole",
-            "StackName": "amplify-tictactoe-dev-141019",
-            "StackId": "arn:aws:cloudformation:eu-west-2:882535348586:stack/amplify-tictactoe-dev-141019/56f62960-a528-11eb-8efc-027a3181b48c",
-            "AmplifyAppId": "d2yt63fup78286"
+            "DeploymentBucketName": "amplify-tictactoe-dev-110111-deployment",
+            "UnauthRoleName": "amplify-tictactoe-dev-110111-unauthRole",
+            "StackName": "amplify-tictactoe-dev-110111",
+            "StackId": "arn:aws:cloudformation:eu-west-2:882535348586:stack/amplify-tictactoe-dev-110111/92d1c2f0-ace9-11eb-baa1-065444838b26",
+            "AmplifyAppId": "d1txp5uhn88mim"
         },
         "categories": {
             "auth": {
@@ -17,12 +17,8 @@
             },
             "function": {
                 "postConfirmation": {
-                    "deploymentBucketName": "amplify-tictactoe-dev-141019-deployment",
+                    "deploymentBucketName": "amplify-tictactoe-dev-110111-deployment",
                     "s3Key": "amplify-builds/postConfirmation-7752342f757666575276-build.zip"
-                },
-                "preAuth": {
-                    "deploymentBucketName": "amplify-tictactoe-dev-141019-deployment",
-                    "s3Key": "amplify-builds/preAuth-78694d4a424941624e49-build.zip"
                 }
             }
         }
