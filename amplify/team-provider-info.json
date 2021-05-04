@@ -22,7 +22,7 @@
                 },
                 "preAuth": {
                     "deploymentBucketName": "amplify-tictactoe-dev-110111-deployment",
-                    "s3Key": "amplify-builds/preAuth-4a62543846727a6b4d52-build.zip"
+                    "s3Key": "amplify-builds/preAuth-66474c324a2f3272352f-build.zip"
                 }
             }
         }
