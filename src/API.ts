@@ -2,6 +2,28 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
+export type GameDate = {
+    __typename: "GameDate";
+    id?: string;
+    status?: GameStatus;
+    turn?: string;
+    state?: Array<Symbol | null>;
+    winner?: string | null;
+};
+
+export enum GameStatus {
+    REQUESTED = "REQUESTED",
+    DECLINED = "DECLINED",
+    ACTIVE = "ACTIVE",
+    FINISHED = "FINISHED",
+    CANCELLED = "CANCELLED"
+}
+
+export enum Symbol {
+    x = "x",
+    o = "o"
+}
+
 export type CreatePlayerInput = {
     id?: string | null;
     cognitoID: string;
@@ -101,19 +123,6 @@ export type Game = {
     updatedAt?: string;
     players?: ModelPlayerGameConnection;
 };
-
-export enum GameStatus {
-    REQUESTED = "REQUESTED",
-    DECLINED = "DECLINED",
-    ACTIVE = "ACTIVE",
-    FINISHED = "FINISHED",
-    CANCELLED = "CANCELLED"
-}
-
-export enum Symbol {
-    x = "x",
-    o = "o"
-}
 
 export type UpdatePlayerInput = {
     id?: string | null;
@@ -258,6 +267,21 @@ export type ModelGameConnection = {
     __typename: "ModelGameConnection";
     items?: Array<Game | null> | null;
     nextToken?: string | null;
+};
+
+export type StartGameMutationVariables = {
+    invitee?: string;
+};
+
+export type StartGameMutation = {
+    startGame?: {
+        __typename: "GameDate";
+        id: string;
+        status: GameStatus;
+        turn: string;
+        state: Array<Symbol | null>;
+        winner?: string | null;
+    } | null;
 };
 
 export type CreatePlayerMutationVariables = {

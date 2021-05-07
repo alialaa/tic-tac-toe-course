@@ -2,6 +2,17 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const startGame = /* GraphQL */ `
+    mutation StartGame($invitee: String!) {
+        startGame(invitee: $invitee) {
+            id
+            status
+            turn
+            state
+            winner
+        }
+    }
+`;
 export const createPlayer = /* GraphQL */ `
     mutation CreatePlayer($input: CreatePlayerInput!, $condition: ModelPlayerConditionInput) {
         createPlayer(input: $input, condition: $condition) {
