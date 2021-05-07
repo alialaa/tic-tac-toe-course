@@ -23,7 +23,6 @@ exports.handler = async (event, context, callback) => {
         },
         disableOffline: true
     });
-    console.log("Hello World");
 
     const query = gql`
         query getPlayer($username: String!) {
