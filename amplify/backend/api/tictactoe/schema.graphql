@@ -9,6 +9,12 @@ type Mutation {
         @aws_cognito_user_pools
 }
 
+type Subscription {
+    onUpdateGameById(id: ID!): Game
+        @aws_subscribe(mutations: ["updateGame"])
+        @aws_cognito_user_pools
+}
+
 type GameData {
     id: ID!
     status: GameStatus!

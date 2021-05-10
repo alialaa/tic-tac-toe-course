@@ -2,6 +2,32 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onUpdateGameById = /* GraphQL */ `
+    subscription OnUpdateGameById($id: ID!) {
+        onUpdateGameById(id: $id) {
+            id
+            status
+            owners
+            initiator
+            turn
+            state
+            winner
+            createdAt
+            updatedAt
+            players {
+                items {
+                    id
+                    createdAt
+                    gameID
+                    playerUsername
+                    owners
+                    updatedAt
+                }
+                nextToken
+            }
+        }
+    }
+`;
 export const onCreatePlayer = /* GraphQL */ `
     subscription OnCreatePlayer {
         onCreatePlayer {
