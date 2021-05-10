@@ -80,7 +80,8 @@ exports.handler = async event => {
             ) {
                 id
                 state
-                statusturn
+                status
+                turn
                 winner
             }
         }
