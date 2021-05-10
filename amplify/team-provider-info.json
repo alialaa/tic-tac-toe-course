@@ -26,11 +26,11 @@
                 },
                 "startGame": {
                     "deploymentBucketName": "amplify-tictactoe-dev-110111-deployment",
-                    "s3Key": "amplify-builds/startGame-476b724d522f6f663256-build.zip"
+                    "s3Key": "amplify-builds/startGame-4439464c2b704b395574-build.zip"
                 },
                 "playMove": {
                     "deploymentBucketName": "amplify-tictactoe-dev-110111-deployment",
-                    "s3Key": "amplify-builds/playMove-506a6d6e75417445394b-build.zip"
+                    "s3Key": "amplify-builds/playMove-6f793167324162446a39-build.zip"
                 }
             }
         }
