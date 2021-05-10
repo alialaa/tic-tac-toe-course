@@ -2,8 +2,8 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type GameDate = {
-    __typename: "GameDate";
+export type GameData = {
+    __typename: "GameData";
     id?: string;
     status?: GameStatus;
     turn?: string;
@@ -275,7 +275,23 @@ export type StartGameMutationVariables = {
 
 export type StartGameMutation = {
     startGame?: {
-        __typename: "GameDate";
+        __typename: "GameData";
+        id: string;
+        status: GameStatus;
+        turn: string;
+        state: Array<Symbol | null>;
+        winner?: string | null;
+    } | null;
+};
+
+export type PlayMoveMutationVariables = {
+    game?: string;
+    index?: number;
+};
+
+export type PlayMoveMutation = {
+    playMove?: {
+        __typename: "GameData";
         id: string;
         status: GameStatus;
         turn: string;

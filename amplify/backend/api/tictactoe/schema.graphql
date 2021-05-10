@@ -1,11 +1,15 @@
 type Mutation {
-    startGame(invitee: String!): GameDate
+    startGame(invitee: String!): GameData
         @function(name: "startGame-${env}")
         @aws_iam
         @aws_cognito_user_pools
+
+    playMove(game: ID!, index: Int!): GameData
+        @function(name: "playMove-${env}")
+        @aws_cognito_user_pools
 }
 
-type GameDate {
+type GameData {
     id: ID!
     status: GameStatus!
     turn: String!
