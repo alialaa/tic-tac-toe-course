@@ -37,6 +37,7 @@
         "expo-haptics": "~8.3.0",
         "expo-linear-gradient": "~8.3.0",
         "expo-status-bar": "~1.0.2",
+        "graphql-tag": "^2.12.4",
         "react": "16.13.1",
         "react-dom": "16.13.1",
         "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.4.tar.gz",
