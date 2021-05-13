@@ -4,7 +4,7 @@ export const getPlayer = gql`
     query GetPlayer(
         $username: String!
         $limit: Int
-        $nextToken: String!
+        $nextToken: String
         $sortDirection: ModelSortDirection
     ) {
         getPlayer(username: $username) {
