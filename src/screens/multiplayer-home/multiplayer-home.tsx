@@ -7,6 +7,8 @@ import { GradientBackground, Text } from "@components";
 import styles from "./multiplayer-home.styles";
 import { useAuth } from "@contexts/auth-context";
 import { colors } from "@utils";
+import { GraphQLResult } from "@aws-amplify/api";
+import { GetPlayerQuery } from "../../API";
 import { getPlayer } from "./multiplayer-home.graphql";
 
 export default function MultiplayerHome(): ReactElement {
@@ -15,15 +17,15 @@ export default function MultiplayerHome(): ReactElement {
     const fetchPlayer = async (nextToken: string | null) => {
         if (user) {
             try {
-                const player = await API.graphql(
+                const player = (await API.graphql(
                     graphqlOperation(getPlayer, {
                         username: user.username,
                         limit: 1,
                         nextToken: nextToken,
                         sortDirection: "DESC"
                     })
-                );
-                console.log("resp: ", player);
+                )) as GraphQLResult<GetPlayerQuery>;
+                console.log("resp : ", player.data?.getPlayer?.games?.items);
             } catch (error) {
                 Alert.alert("Error!", "An error has occurred!");
             }
