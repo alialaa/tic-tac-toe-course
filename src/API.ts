@@ -75,12 +75,12 @@ export type GetPlayerQueryVariables = {
 };
 
 export type GetPlayerQuery = {
-  getPlayer?:  {
+  getPlayer:  {
     __typename: "Player",
     id: string,
-    games?:  {
+    games:  {
       __typename: "ModelPlayerGameConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "PlayerGame",
         game:  {
           __typename: "Game",
@@ -97,7 +97,7 @@ export type GetPlayerQuery = {
           username: string,
         },
       } | null > | null,
-      nextToken?: string | null,
+      nextToken: string | null,
     } | null,
   } | null,
 };
