@@ -89,12 +89,18 @@ export type GetPlayerQuery = {
           owners: Array< string >,
           status: GameStatus,
           turn: string,
-          winner?: string | null,
-        },
-        player:  {
-          __typename: "Player",
-          name: string,
-          username: string,
+          winner: string | null,
+          players:  {
+            __typename: "ModelPlayerGameConnection",
+            items:  Array< {
+              __typename: "PlayerGame",
+              player:  {
+                __typename: "Player",
+                name: string,
+                username: string,
+              },
+            } | null > | null,
+          } | null,
         },
       } | null > | null,
       nextToken: string | null,
