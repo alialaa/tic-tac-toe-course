@@ -54,30 +54,29 @@ export default function MultiplayerHome(): ReactElement {
         }
     };
 
+    const getResult = (playerGame: PlayerGameType): "win" | "loss" | "draw" | false => {
+        if (!playerGame || !user) return false;
+        const game = playerGame.game;
+        if (game.status !== "FINISHED") return false;
+        const opponent = game?.players?.items?.find(
+            playerGame => playerGame?.player.username !== user.username
+        );
+        if (game.winner === user.username) return "win";
+        if (game.winner === opponent?.player.username) return "loss";
+        if (game.winner === null) return "draw";
+        return false;
+    };
+
     const renderGame = ({ item }: { item: PlayerGameType }) => {
         if (!user) return null;
         const game = item?.game;
+        const result = getResult(item);
         const opponent = game?.players?.items?.find(
             playerGame => playerGame?.player.username !== user.username
         );
         return (
-            <TouchableOpacity
-                style={{
-                    backgroundColor: colors.purple,
-                    padding: 15,
-                    borderTopWidth: 1,
-                    borderColor: colors.lightPurple,
-                    marginBottom: 20
-                }}
-            >
-                <Text
-                    style={{
-                        color: colors.lightGreen,
-                        textAlign: "center",
-                        fontSize: 17,
-                        marginBottom: 10
-                    }}
-                >
+            <TouchableOpacity style={styles.item}>
+                <Text style={styles.itemTitle}>
                     {opponent?.player.name} ({opponent?.player.username})
                 </Text>
                 {(game?.status === "REQUESTED" || game?.status === "ACTIVE") && (
@@ -85,6 +84,13 @@ export default function MultiplayerHome(): ReactElement {
                         {game.turn === user.username
                             ? "Your Turn!"
                             : `Waiting for ${opponent?.player.username}`}
+                    </Text>
+                )}
+                {result && (
+                    <Text style={{ color: colors[result], textAlign: "center" }}>
+                        {result === "win" && "You Won!"}
+                        {result === "loss" && "You Lost!"}
+                        {result === "draw" && "It is a draw!"}
                     </Text>
                 )}
             </TouchableOpacity>
@@ -131,13 +137,7 @@ export default function MultiplayerHome(): ReactElement {
                         ListEmptyComponent={() => {
                             if (loading) {
                                 return (
-                                    <View
-                                        style={{
-                                            flex: 1,
-                                            justifyContent: "center",
-                                            alignItems: "center"
-                                        }}
-                                    >
+                                    <View style={styles.loading}>
                                         <ActivityIndicator color={colors.lightGreen} />
                                     </View>
                                 );
@@ -149,18 +149,8 @@ export default function MultiplayerHome(): ReactElement {
                             );
                         }}
                     />
-                    <TouchableOpacity
-                        style={{
-                            backgroundColor: colors.lightPurple,
-                            padding: 20,
-                            paddingBottom: 30
-                        }}
-                    >
-                        <Text
-                            style={{ color: colors.lightGreen, textAlign: "center", fontSize: 17 }}
-                        >
-                            New Game
-                        </Text>
+                    <TouchableOpacity style={styles.newGameButton}>
+                        <Text style={styles.newGameButtonText}>New Game</Text>
                     </TouchableOpacity>
                 </>
             ) : (
