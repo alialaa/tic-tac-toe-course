@@ -8,12 +8,9 @@ import { useAuth } from "@contexts/auth-context";
 import { colors } from "@utils";
 import { GraphQLResult } from "@aws-amplify/api";
 import { GetPlayerQuery } from "@api";
-import { getPlayer } from "./multiplayer-home.graphql";
+import { getPlayer, PlayerGameType } from "./multiplayer-home.graphql";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { color } from "react-native-reanimated";
-
-type PlayerGamesType = Exclude<Exclude<GetPlayerQuery["getPlayer"], null>["games"], null>["items"];
-type PlayerGameType = Exclude<PlayerGamesType, null>[0];
+import GameItem from "./game-item";
 
 export default function MultiplayerHome(): ReactElement {
     const { user } = useAuth();
@@ -54,49 +51,6 @@ export default function MultiplayerHome(): ReactElement {
         }
     };
 
-    const getResult = (playerGame: PlayerGameType): "win" | "loss" | "draw" | false => {
-        if (!playerGame || !user) return false;
-        const game = playerGame.game;
-        if (game.status !== "FINISHED") return false;
-        const opponent = game?.players?.items?.find(
-            playerGame => playerGame?.player.username !== user.username
-        );
-        if (game.winner === user.username) return "win";
-        if (game.winner === opponent?.player.username) return "loss";
-        if (game.winner === null) return "draw";
-        return false;
-    };
-
-    const renderGame = ({ item }: { item: PlayerGameType }) => {
-        if (!user) return null;
-        const game = item?.game;
-        const result = getResult(item);
-        const opponent = game?.players?.items?.find(
-            playerGame => playerGame?.player.username !== user.username
-        );
-        return (
-            <TouchableOpacity style={styles.item}>
-                <Text style={styles.itemTitle}>
-                    {opponent?.player.name} ({opponent?.player.username})
-                </Text>
-                {(game?.status === "REQUESTED" || game?.status === "ACTIVE") && (
-                    <Text style={{ color: colors.lightGreen, textAlign: "center" }}>
-                        {game.turn === user.username
-                            ? "Your Turn!"
-                            : `Waiting for ${opponent?.player.username}`}
-                    </Text>
-                )}
-                {result && (
-                    <Text style={{ color: colors[result], textAlign: "center" }}>
-                        {result === "win" && "You Won!"}
-                        {result === "loss" && "You Lost!"}
-                        {result === "draw" && "It is a draw!"}
-                    </Text>
-                )}
-            </TouchableOpacity>
-        );
-    };
-
     useEffect(() => {
         fetchPlayer(null, true);
     }, []);
@@ -108,7 +62,7 @@ export default function MultiplayerHome(): ReactElement {
                     <FlatList
                         contentContainerStyle={styles.container}
                         data={playerGames}
-                        renderItem={renderGame}
+                        renderItem={({ item }) => <GameItem playerGame={item} />}
                         refreshControl={
                             <RefreshControl
                                 refreshing={refreshing}
