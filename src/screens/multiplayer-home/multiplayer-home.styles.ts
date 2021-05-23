@@ -32,6 +32,13 @@ const styles = StyleSheet.create({
         color: colors.lightGreen,
         textAlign: "center",
         fontSize: 17
+    },
+    itemBackground: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0
     }
 });
 
