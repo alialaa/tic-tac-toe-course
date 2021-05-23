@@ -1,9 +1,11 @@
 import React, { ReactElement, useEffect } from "react";
 import { TouchableOpacity } from "react-native";
+import { API, graphqlOperation } from "aws-amplify";
+import Observable from "zen-observable";
 
 import { useAuth } from "@contexts/auth-context";
 import { Text } from "@components";
-import { PlayerGameType } from "./multiplayer-home.graphql";
+import { PlayerGameType, onUpdateGameById } from "./multiplayer-home.graphql";
 import { colors } from "@utils";
 import styles from "./multiplayer-home.styles";
 
@@ -35,10 +37,20 @@ export default function GameItem({
     );
 
     useEffect(() => {
-        if (game) {
-            console.log("mounting: ", game.id);
+        if (game && (game.status === "REQUESTED" || game.status === "ACTIVE")) {
+            const gameUpdates = (API.graphql(
+                graphqlOperation(onUpdateGameById, {
+                    id: game.id
+                })
+            ) as unknown) as Observable<{ [key: string]: any }>;
+            const subscription = gameUpdates.subscribe({
+                next: ({ value }) => {
+                    console.log("#########################value: ", value);
+                }
+            });
+
             return () => {
-                console.log("unmonting: ", game.id);
+                subscription.unsubscribe();
             };
         }
     }, []);
