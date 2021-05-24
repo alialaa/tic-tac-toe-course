@@ -9,11 +9,15 @@ import { PlayerGameType, onUpdateGameById } from "./multiplayer-home.graphql";
 import { colors } from "@utils";
 import styles from "./multiplayer-home.styles";
 
-export default function GameItem({
-    playerGame: playerGameProp
-}: {
+type GameItemProps = {
     playerGame: PlayerGameType;
-}): ReactElement | null {
+    onPress: () => void;
+};
+
+export default function GameItem({
+    playerGame: playerGameProp,
+    onPress
+}: GameItemProps): ReactElement | null {
     const { user } = useAuth();
     const [playerGame, setPlayerGame] = useState(playerGameProp);
     const animationRef = useRef<Animated.Value>(new Animated.Value(0));
@@ -80,7 +84,12 @@ export default function GameItem({
     }, []);
 
     return (
-        <TouchableOpacity style={styles.item}>
+        <TouchableOpacity
+            onPress={() => {
+                onPress();
+            }}
+            style={styles.item}
+        >
             <Animated.View
                 style={[
                     styles.itemBackground,

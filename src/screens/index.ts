@@ -6,3 +6,4 @@ export { default as SignUp } from "./signup/signup";
 export { default as ChangePassword } from "./change-password/change-password";
 export { default as ForgotPassword } from "./forgot-password/forgot-password";
 export { default as MultiplayerHome } from "./multiplayer-home/multiplayer-home";
+export { default as MultiplayerGame } from "./multiplayer-game/multiplayer-game";

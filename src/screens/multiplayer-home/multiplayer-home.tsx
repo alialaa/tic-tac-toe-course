@@ -13,8 +13,19 @@ import { getPlayer, PlayerGameType } from "./multiplayer-home.graphql";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import GameItem from "./game-item";
 import PlayersModal from "./players-modal/players-modal";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { StackNavigatorParams } from "@config/navigator";
 
-export default function MultiplayerHome(): ReactElement {
+type MultiplayerHomeScreenNavigationProp = StackNavigationProp<
+    StackNavigatorParams,
+    "MultiplayerHome"
+>;
+
+type MultiplayerHomeProps = {
+    navigation: MultiplayerHomeScreenNavigationProp;
+};
+
+export default function MultiplayerHome({ navigation }: MultiplayerHomeProps): ReactElement {
     const { user } = useAuth();
     const [playerGames, setPlayerGames] = useState<PlayerGameType[] | null>(null);
     const [nextToken, setNextToken] = useState<string | null>(null);
@@ -65,7 +76,18 @@ export default function MultiplayerHome(): ReactElement {
                     <FlatList
                         contentContainerStyle={styles.container}
                         data={playerGames}
-                        renderItem={({ item }) => <GameItem playerGame={item} />}
+                        renderItem={({ item }) => (
+                            <GameItem
+                                onPress={() => {
+                                    if (item?.game) {
+                                        navigation.navigate("MultiplayerGame", {
+                                            gameID: item?.game.id
+                                        });
+                                    }
+                                }}
+                                playerGame={item}
+                            />
+                        )}
                         refreshControl={
                             <RefreshControl
                                 refreshing={refreshing}
@@ -128,7 +150,12 @@ export default function MultiplayerHome(): ReactElement {
                 onBackdropPress={() => setPlayersModal(false)}
                 onBackButtonPress={() => setPlayersModal(false)}
             >
-                <PlayersModal />
+                <PlayersModal
+                    onItemPress={username => {
+                        setPlayersModal(false);
+                        navigation.navigate("MultiplayerGame", { invitee: username });
+                    }}
+                />
             </Modal>
         </GradientBackground>
     );

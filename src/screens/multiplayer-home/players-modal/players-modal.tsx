@@ -18,7 +18,11 @@ import styles from "./players-modal.styles";
 
 type PlayesListType = Exclude<searchPlayersQuery["searchPlayers"], null>["items"];
 
-export default function PlayersModal(): ReactElement {
+type PlayersModalPtops = {
+    onItemPress: (username: string) => void;
+};
+
+export default function PlayersModal({ onItemPress }: PlayersModalPtops): ReactElement {
     const [players, setPlayers] = useState<PlayesListType>(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [loading, setLoading] = useState(false);
@@ -76,7 +80,14 @@ export default function PlayersModal(): ReactElement {
                             data={players}
                             renderItem={({ item }) => {
                                 return (
-                                    <TouchableOpacity style={styles.playerItem}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            if (item) {
+                                                onItemPress(item?.username);
+                                            }
+                                        }}
+                                        style={styles.playerItem}
+                                    >
                                         <Text style={{ color: colors.lightGreen, fontSize: 17 }}>
                                             {" "}
                                             {item?.name}{" "}
