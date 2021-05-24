@@ -1,9 +1,9 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import { Alert, View, ActivityIndicator } from "react-native";
+import { Alert, View, ActivityIndicator, SafeAreaView, Dimensions } from "react-native";
 import { API, graphqlOperation } from "aws-amplify";
 import Observable from "zen-observable";
 
-import { GradientBackground, Board } from "@components";
+import { GradientBackground, Board, Text, Button } from "@components";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigatorParams } from "@config/navigator";
@@ -33,6 +33,8 @@ type MultiPlayerGameProps = {
     route: MultiplayerGameScreenRouteProp;
 };
 
+const SCREEN_WIDTH = Dimensions.get("screen").width;
+
 export default function MultiplayerGame({ navigation, route }: MultiPlayerGameProps): ReactElement {
     const { gameID: existingGameID, invitee } = route.params;
     const [gameID, setGameID] = useState<string | null>(null);
@@ -44,6 +46,7 @@ export default function MultiplayerGame({ navigation, route }: MultiPlayerGamePr
     const { user } = useAuth();
     const gameResult = game ? isTerminal(game?.state as BoardState) : false;
     const playSound = useSounds();
+    const opponentUsername = game && user && game?.owners.find(p => p !== user.username);
 
     const initGame = async () => {
         setLoading(true);
@@ -143,25 +146,46 @@ export default function MultiplayerGame({ navigation, route }: MultiPlayerGamePr
 
     return (
         <GradientBackground>
-            {loading && (
-                <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-                    <ActivityIndicator color={colors.lightGreen} />
-                </View>
-            )}
-            {game && user && (
-                <Board
-                    size={300}
-                    state={game.state as BoardState}
-                    loading={playingTurn}
-                    gameResult={gameResult}
-                    disabled={
-                        game.turn !== user.username ||
-                        playingTurn !== false ||
-                        (game.status !== "ACTIVE" && game.status !== "REQUESTED")
-                    }
-                    onCellPressed={index => playTurn(index as Moves)}
-                />
-            )}
+            <SafeAreaView style={styles.container}>
+                {loading && (
+                    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                        <ActivityIndicator color={colors.lightGreen} />
+                    </View>
+                )}
+                {game && user && (
+                    <Board
+                        size={SCREEN_WIDTH - 60}
+                        state={game.state as BoardState}
+                        loading={playingTurn}
+                        gameResult={gameResult}
+                        disabled={
+                            game.turn !== user.username ||
+                            playingTurn !== false ||
+                            (game.status !== "ACTIVE" && game.status !== "REQUESTED")
+                        }
+                        onCellPressed={index => playTurn(index as Moves)}
+                    />
+                )}
+                {user && game && game.status === "FINISHED" && (
+                    <View style={styles.modal}>
+                        <Text style={styles.modalText}>
+                            {game.winner === user.username && "You Won"}
+                            {game.winner === opponentUsername && "You Lost"}
+                            {!game.winner && "It's a Draw"}
+                        </Text>
+                        <Button
+                            onPress={() => {
+                                if (opponentUsername) {
+                                    navigation.replace("MultiplayerGame", {
+                                        invitee: opponentUsername
+                                    });
+                                }
+                            }}
+                            title="Play Again"
+                        />
+                    </View>
+                )}
+            </SafeAreaView>
         </GradientBackground>
     );
 }
