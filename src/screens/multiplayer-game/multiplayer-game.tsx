@@ -1,6 +1,7 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { Alert, View, ActivityIndicator } from "react-native";
-import { API, graphqlOperation, loadingSceneName } from "aws-amplify";
+import { API, graphqlOperation } from "aws-amplify";
+import Observable from "zen-observable";
 
 import { GradientBackground, Text, Board } from "@components";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -9,9 +10,9 @@ import { StackNavigatorParams } from "@config/navigator";
 import { getGame, startGame, playMove } from "./multiplayer-game.graphql";
 import { GraphQLResult } from "@aws-amplify/api";
 import { getGameQuery, startGameMutation, playMoveMutation } from "@api";
-import styles from "./multiplayer-game.styles";
-import { BoardState, colors, Moves, getErrorMessage } from "@utils";
+import { BoardState, colors, Moves, getErrorMessage, onUpdateGameById } from "@utils";
 import { useAuth } from "@contexts/auth-context";
+import styles from "./multiplayer-game.styles";
 
 type GameType = getGameQuery["getGame"];
 type MultiplayerGameScreenNavigationProp = StackNavigationProp<
@@ -84,6 +85,30 @@ export default function MultiplayerGame({ navigation, route }: MultiPlayerGamePr
     };
 
     useEffect(() => {
+        if (gameID) {
+            const gameUpdates = (API.graphql(
+                graphqlOperation(onUpdateGameById, {
+                    id: gameID
+                })
+            ) as unknown) as Observable<{ [key: string]: any }>;
+
+            const subscription = gameUpdates.subscribe({
+                next: ({ value }) => {
+                    const newGame = value.data.onUpdateGameById;
+                    if (newGame && game) {
+                        const { status, state, winner, turn } = newGame;
+                        setGame({ ...game, status, state, winner, turn });
+                    }
+                }
+            });
+
+            return () => {
+                subscription.unsubscribe();
+            };
+        }
+    }, [gameID]);
+
+    useEffect(() => {
         initGame();
     }, []);
 
@@ -99,7 +124,11 @@ export default function MultiplayerGame({ navigation, route }: MultiPlayerGamePr
                     size={300}
                     state={game.state as BoardState}
                     loading={playingTurn}
-                    disabled={game.turn !== user.username || playingTurn !== false}
+                    disabled={
+                        game.turn !== user.username ||
+                        playingTurn !== false ||
+                        (game.status !== "ACTIVE" && game.status !== "REQUESTED")
+                    }
                     onCellPressed={index => playTurn(index as Moves)}
                 />
             )}

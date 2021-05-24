@@ -5,8 +5,8 @@ import Observable from "zen-observable";
 
 import { useAuth } from "@contexts/auth-context";
 import { Text } from "@components";
-import { PlayerGameType, onUpdateGameById } from "./multiplayer-home.graphql";
-import { colors } from "@utils";
+import { PlayerGameType } from "./multiplayer-home.graphql";
+import { colors, onUpdateGameById } from "@utils";
 import styles from "./multiplayer-home.styles";
 
 type GameItemProps = {
