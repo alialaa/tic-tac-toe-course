@@ -131,6 +131,10 @@ export type playMoveMutation = {
   playMove:  {
     __typename: "GameData",
     id: string,
+    status: GameStatus,
+    turn: string,
+    state: Array< Symbol | null >,
+    winner: string | null,
   } | null,
 };
 

@@ -34,6 +34,10 @@ export const playMove = gql`
     mutation playMove($game: ID!, $index: Int!) {
         playMove(game: $game, index: $index) {
             id
+            status
+            turn
+            state
+            winner
         }
     }
 `;

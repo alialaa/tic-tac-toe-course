@@ -10,7 +10,8 @@ import { getGame, startGame, playMove } from "./multiplayer-game.graphql";
 import { GraphQLResult } from "@aws-amplify/api";
 import { getGameQuery, startGameMutation, playMoveMutation } from "@api";
 import styles from "./multiplayer-game.styles";
-import { BoardState, colors } from "@utils";
+import { BoardState, colors, Moves } from "@utils";
+import { useAuth } from "@contexts/auth-context";
 
 type GameType = getGameQuery["getGame"];
 type MultiplayerGameScreenNavigationProp = StackNavigationProp<
@@ -28,6 +29,9 @@ export default function MultiplayerGame({ navigation, route }: MultiPlayerGamePr
     const [gameID, setGameID] = useState<string | null>(null);
     const [game, setGame] = useState<GameType | null>(null);
     const [loading, setLoading] = useState(false);
+    const [playingTurn, setPlayingTurn] = useState<Moves | false>(false);
+
+    const { user } = useAuth();
 
     const initGame = async () => {
         setLoading(true);
@@ -60,7 +64,8 @@ export default function MultiplayerGame({ navigation, route }: MultiPlayerGamePr
         setLoading(false);
     };
 
-    const playTurn = async (index: number) => {
+    const playTurn = async (index: Moves) => {
+        setPlayingTurn(index);
         try {
             const playMoveRes = (await API.graphql(
                 graphqlOperation(playMove, {
@@ -68,14 +73,18 @@ export default function MultiplayerGame({ navigation, route }: MultiPlayerGamePr
                     game: gameID
                 })
             )) as GraphQLResult<playMoveMutation>;
-            console.log("playMoveRes:", playMoveRes);
+            if (game && playMoveRes.data?.playMove) {
+                const { status, state, winner, turn } = playMoveRes.data.playMove;
+                setGame({ ...game, status, state, winner, turn });
+            }
         } catch (error) {
             if (error.errors && error.errors.length > 0) {
                 Alert.alert("Error!", error.errors[0].message);
-                return;
+            } else {
+                Alert.alert("Error!", error.message || "An error has occured");
             }
-            Alert.alert("Error!", error.message || "An error has occured");
         }
+        setPlayingTurn(false);
     };
 
     useEffect(() => {
@@ -89,11 +98,13 @@ export default function MultiplayerGame({ navigation, route }: MultiPlayerGamePr
                     <ActivityIndicator color={colors.lightGreen} />
                 </View>
             )}
-            {game && (
+            {game && user && (
                 <Board
                     size={300}
                     state={game.state as BoardState}
-                    onCellPressed={index => playTurn(index)}
+                    loading={playingTurn}
+                    disabled={game.turn !== user.username || playingTurn !== false}
+                    onCellPressed={index => playTurn(index as Moves)}
                 />
             )}
         </GradientBackground>
