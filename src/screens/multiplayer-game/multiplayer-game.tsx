@@ -3,14 +3,22 @@ import { Alert, View, ActivityIndicator } from "react-native";
 import { API, graphqlOperation } from "aws-amplify";
 import Observable from "zen-observable";
 
-import { GradientBackground, Text, Board } from "@components";
+import { GradientBackground, Board } from "@components";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigatorParams } from "@config/navigator";
 import { getGame, startGame, playMove } from "./multiplayer-game.graphql";
 import { GraphQLResult } from "@aws-amplify/api";
 import { getGameQuery, startGameMutation, playMoveMutation } from "@api";
-import { BoardState, colors, Moves, getErrorMessage, onUpdateGameById } from "@utils";
+import {
+    BoardState,
+    colors,
+    Moves,
+    getErrorMessage,
+    onUpdateGameById,
+    isTerminal,
+    useSounds
+} from "@utils";
 import { useAuth } from "@contexts/auth-context";
 import styles from "./multiplayer-game.styles";
 
@@ -30,9 +38,12 @@ export default function MultiplayerGame({ navigation, route }: MultiPlayerGamePr
     const [gameID, setGameID] = useState<string | null>(null);
     const [game, setGame] = useState<GameType | null>(null);
     const [loading, setLoading] = useState(false);
+    const [finished, setFinished] = useState(false);
     const [playingTurn, setPlayingTurn] = useState<Moves | false>(false);
 
     const { user } = useAuth();
+    const gameResult = game ? isTerminal(game?.state as BoardState) : false;
+    const playSound = useSounds();
 
     const initGame = async () => {
         setLoading(true);
@@ -55,6 +66,9 @@ export default function MultiplayerGame({ navigation, route }: MultiPlayerGamePr
                     })
                 )) as GraphQLResult<getGameQuery>;
                 if (getGameRes.data?.getGame) {
+                    if (getGameRes.data?.getGame.status === "FINISHED") {
+                        setFinished(true);
+                    }
                     setGame(getGameRes.data?.getGame);
                     setGameID(gameID);
                 }
@@ -85,7 +99,7 @@ export default function MultiplayerGame({ navigation, route }: MultiPlayerGamePr
     };
 
     useEffect(() => {
-        if (gameID) {
+        if (game && (game.status === "REQUESTED" || game.status === "ACTIVE")) {
             const gameUpdates = (API.graphql(
                 graphqlOperation(onUpdateGameById, {
                     id: gameID
@@ -98,6 +112,9 @@ export default function MultiplayerGame({ navigation, route }: MultiPlayerGamePr
                     if (newGame && game) {
                         const { status, state, winner, turn } = newGame;
                         setGame({ ...game, status, state, winner, turn });
+                        if (user) {
+                            user.username === turn ? playSound("pop1") : playSound("pop2");
+                        }
                     }
                 }
             });
@@ -107,6 +124,18 @@ export default function MultiplayerGame({ navigation, route }: MultiPlayerGamePr
             };
         }
     }, [gameID]);
+
+    useEffect(() => {
+        if (game && game.status === "FINISHED" && !finished) {
+            if (game.winner === null) {
+                playSound("draw");
+            } else if (user && game.winner === user.username) {
+                playSound("win");
+            } else {
+                playSound("loss");
+            }
+        }
+    }, [game]);
 
     useEffect(() => {
         initGame();
@@ -124,6 +153,7 @@ export default function MultiplayerGame({ navigation, route }: MultiPlayerGamePr
                     size={300}
                     state={game.state as BoardState}
                     loading={playingTurn}
+                    gameResult={gameResult}
                     disabled={
                         game.turn !== user.username ||
                         playingTurn !== false ||
