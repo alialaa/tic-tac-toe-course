@@ -67,6 +67,13 @@ export enum Symbol {
 }
 
 
+export type SearchablePlayerConnection = {
+  __typename: "SearchablePlayerConnection",
+  items?:  Array<Player | null > | null,
+  nextToken?: string | null,
+  total?: number | null,
+};
+
 export type GetPlayerQueryVariables = {
   username?: string,
   limit?: number | null,
@@ -120,5 +127,23 @@ export type onUpdateGameByIdSubscription = {
     turn: string,
     state: Array< Symbol | null >,
     winner?: string | null,
+  } | null,
+};
+
+export type searchPlayersQueryVariables = {
+  limit?: number | null,
+  nextToken?: string | null,
+  searchString?: string | null,
+};
+
+export type searchPlayersQuery = {
+  searchPlayers:  {
+    __typename: "SearchablePlayerConnection",
+    items:  Array< {
+      __typename: "Player",
+      name: string,
+      username: string,
+    } | null > | null,
+    nextToken: string | null,
   } | null,
 };

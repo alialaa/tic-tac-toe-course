@@ -47,6 +47,27 @@ export const onUpdateGameById = gql`
     }
 `;
 
+export const searchPlayers = gql`
+    query searchPlayers($limit: Int, $nextToken: String, $searchString: String) {
+        searchPlayers(
+            limit: $limit
+            nextToken: $nextToken
+            filter: {
+                or: [
+                    { username: { matchPhrasePrefix: $searchString } }
+                    { name: { matchPhrasePrefix: $searchString } }
+                ]
+            }
+        ) {
+            items {
+                name
+                username
+            }
+            nextToken
+        }
+    }
+`;
+
 export type PlayerGamesType = Exclude<
     Exclude<GetPlayerQuery["getPlayer"], null>["games"],
     null
