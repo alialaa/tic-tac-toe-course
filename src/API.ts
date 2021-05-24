@@ -2,23 +2,34 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
+export type Game = {
+  __typename: "Game",
+  id?: string,
+  status: GameStatus,
+  owners: Array< string >,
+  initiator?: string,
+  turn: string,
+  state: Array< Symbol | null >,
+  winner: string | null,
+  createdAt?: string,
+  updatedAt?: string,
+  players: ModelPlayerGameConnection,
+};
+
+export enum GameStatus {
+  REQUESTED = "REQUESTED",
+  DECLINED = "DECLINED",
+  ACTIVE = "ACTIVE",
+  FINISHED = "FINISHED",
+  CANCELLED = "CANCELLED",
 }
 
 
-export type Player = {
-  __typename: "Player",
-  id?: string,
-  cognitoID?: string,
-  username?: string,
-  name?: string,
-  email?: string,
-  createdAt?: string,
-  updatedAt?: string,
-  games?: ModelPlayerGameConnection,
-};
+export enum Symbol {
+  x = "x",
+  o = "o",
+}
+
 
 export type ModelPlayerGameConnection = {
   __typename: "ModelPlayerGameConnection",
@@ -38,32 +49,30 @@ export type PlayerGame = {
   game?: Game,
 };
 
-export type Game = {
-  __typename: "Game",
+export type Player = {
+  __typename: "Player",
+  id?: string,
+  cognitoID?: string,
+  username?: string,
+  name?: string,
+  email?: string,
+  createdAt?: string,
+  updatedAt?: string,
+  games?: ModelPlayerGameConnection,
+};
+
+export type GameData = {
+  __typename: "GameData",
   id?: string,
   status?: GameStatus,
-  owners?: Array< string >,
-  initiator?: string,
   turn?: string,
   state?: Array< Symbol | null >,
   winner?: string | null,
-  createdAt?: string,
-  updatedAt?: string,
-  players?: ModelPlayerGameConnection,
 };
 
-export enum GameStatus {
-  REQUESTED = "REQUESTED",
-  DECLINED = "DECLINED",
-  ACTIVE = "ACTIVE",
-  FINISHED = "FINISHED",
-  CANCELLED = "CANCELLED",
-}
-
-
-export enum Symbol {
-  x = "x",
-  o = "o",
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
 }
 
 
@@ -72,6 +81,57 @@ export type SearchablePlayerConnection = {
   items?:  Array<Player | null > | null,
   nextToken?: string | null,
   total?: number | null,
+};
+
+export type getGameQueryVariables = {
+  id?: string,
+};
+
+export type getGameQuery = {
+  getGame?:  {
+    __typename: "Game",
+    id: string,
+    status: GameStatus,
+    owners: Array< string >,
+    initiator: string,
+    turn: string,
+    state: Array< Symbol | null >,
+    winner?: string | null,
+    players?:  {
+      __typename: "ModelPlayerGameConnection",
+      items?:  Array< {
+        __typename: "PlayerGame",
+        player:  {
+          __typename: "Player",
+          username: string,
+          name: string,
+        },
+      } | null > | null,
+    } | null,
+  } | null,
+};
+
+export type startGameMutationVariables = {
+  invitee: string,
+};
+
+export type startGameMutation = {
+  startGame:  {
+    __typename: "GameData",
+    id: string,
+  } | null,
+};
+
+export type playMoveMutationVariables = {
+  game?: string,
+  index?: number,
+};
+
+export type playMoveMutation = {
+  playMove:  {
+    __typename: "GameData",
+    id: string,
+  } | null,
 };
 
 export type GetPlayerQueryVariables = {
