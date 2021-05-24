@@ -1,15 +1,16 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import { Alert, View } from "react-native";
+import { Alert, View, ActivityIndicator } from "react-native";
 import { API, graphqlOperation, loadingSceneName } from "aws-amplify";
 
-import { GradientBackground, Text } from "@components";
+import { GradientBackground, Text, Board } from "@components";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigatorParams } from "@config/navigator";
 import { getGame, startGame, playMove } from "./multiplayer-game.graphql";
 import { GraphQLResult } from "@aws-amplify/api";
-import { getGameQuery, startGameMutation } from "@api";
+import { getGameQuery, startGameMutation, playMoveMutation } from "@api";
 import styles from "./multiplayer-game.styles";
+import { BoardState, colors } from "@utils";
 
 type GameType = getGameQuery["getGame"];
 type MultiplayerGameScreenNavigationProp = StackNavigationProp<
@@ -59,15 +60,42 @@ export default function MultiplayerGame({ navigation, route }: MultiPlayerGamePr
         setLoading(false);
     };
 
+    const playTurn = async (index: number) => {
+        try {
+            const playMoveRes = (await API.graphql(
+                graphqlOperation(playMove, {
+                    index,
+                    game: gameID
+                })
+            )) as GraphQLResult<playMoveMutation>;
+            console.log("playMoveRes:", playMoveRes);
+        } catch (error) {
+            if (error.errors && error.errors.length > 0) {
+                Alert.alert("Error!", error.errors[0].message);
+                return;
+            }
+            Alert.alert("Error!", error.message || "An error has occured");
+        }
+    };
+
     useEffect(() => {
         initGame();
     }, []);
 
     return (
         <GradientBackground>
-            <View>
-                <Text>Game</Text>
-            </View>
+            {loading && (
+                <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                    <ActivityIndicator color={colors.lightGreen} />
+                </View>
+            )}
+            {game && (
+                <Board
+                    size={300}
+                    state={game.state as BoardState}
+                    onCellPressed={index => playTurn(index)}
+                />
+            )}
         </GradientBackground>
     );
 }
