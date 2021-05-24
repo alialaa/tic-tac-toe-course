@@ -1,7 +1,6 @@
 import React, { ReactElement, useEffect, useState, useRef } from "react";
 import {
     View,
-    Dimensions,
     Alert,
     TextInput as NativeTextInput,
     FlatList,
@@ -15,8 +14,7 @@ import { GradientBackground, Text, TextInput } from "@components";
 import { searchPlayers } from "../multiplayer-home.graphql";
 import { colors } from "@utils";
 import { TouchableOpacity } from "react-native-gesture-handler";
-
-const SCREEN_HEIGHT = Dimensions.get("screen").height;
+import styles from "./players-modal.styles";
 
 type PlayesListType = Exclude<searchPlayersQuery["searchPlayers"], null>["items"];
 
@@ -54,14 +52,9 @@ export default function PlayersModal(): ReactElement {
     }, []);
 
     return (
-        <View
-            style={{
-                height: SCREEN_HEIGHT * 0.6,
-                marginTop: SCREEN_HEIGHT * 0.4
-            }}
-        >
+        <View style={styles.modalContainer}>
             <GradientBackground>
-                <View style={{ padding: 20, backgroundColor: colors.purple }}>
+                <View style={styles.searchContainer}>
                     <TextInput
                         value={searchQuery}
                         onChangeText={text => setSearchQuery(text)}
@@ -79,15 +72,16 @@ export default function PlayersModal(): ReactElement {
                         </View>
                     ) : (
                         <FlatList
+                            contentContainerStyle={{ padding: 20 }}
                             data={players}
                             renderItem={({ item }) => {
                                 return (
-                                    <TouchableOpacity>
-                                        <Text style={{ color: colors.lightGreen }}>
+                                    <TouchableOpacity style={styles.playerItem}>
+                                        <Text style={{ color: colors.lightGreen, fontSize: 17 }}>
                                             {" "}
                                             {item?.name}{" "}
                                         </Text>
-                                        <Text style={{ color: colors.lightGreen }}>
+                                        <Text weight="400" style={{ color: colors.lightGreen }}>
                                             {" "}
                                             {item?.username}{" "}
                                         </Text>
