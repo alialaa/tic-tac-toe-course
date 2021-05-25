@@ -18,10 +18,14 @@ export const getPlayer = gql`
                         status
                         turn
                         winner
-                    }
-                    player {
-                        name
-                        username
+                        players {
+                            items {
+                                player {
+                                    name
+                                    username
+                                }
+                            }
+                        }
                     }
                 }
                 nextToken
