@@ -115,7 +115,7 @@ exports.handler = async event => {
             newWinner = game.initiator;
         }
         if (terminalState.winner === "o") {
-            newWinner = game.invitee;
+            newWinner = invitee;
         }
     }
 
