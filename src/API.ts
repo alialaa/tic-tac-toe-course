@@ -734,30 +734,41 @@ export type ListPlayersQuery = {
 
 export type GetPlayerQueryVariables = {
     username?: string;
+    limit?: number | null;
+    nextToken?: string | null;
+    sortDirection?: ModelSortDirection | null;
 };
 
 export type GetPlayerQuery = {
-    getPlayer?: {
+    getPlayer: {
         __typename: "Player";
         id: string;
-        cognitoID: string;
-        username: string;
-        name: string;
-        email: string;
-        createdAt: string;
-        updatedAt: string;
-        games?: {
+        games: {
             __typename: "ModelPlayerGameConnection";
-            items?: Array<{
+            items: Array<{
                 __typename: "PlayerGame";
-                id: string;
-                createdAt: string;
-                gameID: string;
-                playerUsername: string;
-                owners: Array<string>;
-                updatedAt: string;
+                game: {
+                    __typename: "Game";
+                    id: string;
+                    initiator: string;
+                    owners: Array<string>;
+                    status: GameStatus;
+                    turn: string;
+                    winner: string | null;
+                    players: {
+                        __typename: "ModelPlayerGameConnection";
+                        items: Array<{
+                            __typename: "PlayerGame";
+                            player: {
+                                __typename: "Player";
+                                name: string;
+                                username: string;
+                            };
+                        } | null> | null;
+                    } | null;
+                };
             } | null> | null;
-            nextToken?: string | null;
+            nextToken: string | null;
         } | null;
     } | null;
 };
