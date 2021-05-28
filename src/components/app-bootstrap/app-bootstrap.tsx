@@ -4,7 +4,8 @@ import {
     DeliusUnicase_400Regular,
     DeliusUnicase_700Bold
 } from "@expo-google-fonts/delius-unicase";
-import { AppLoading } from "expo";
+import AppLoading from "expo-app-loading";
+
 import { Auth, Hub } from "aws-amplify";
 import { useAuth } from "@contexts/auth-context";
 

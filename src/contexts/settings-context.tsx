@@ -7,7 +7,7 @@ import React, {
     useEffect
 } from "react";
 import { Alert } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const difficulties = {
     "1": "Beginner",
