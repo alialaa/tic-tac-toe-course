@@ -24,6 +24,17 @@ export const playMove = /* GraphQL */ `
         }
     }
 `;
+export const addExpoToken = /* GraphQL */ `
+    mutation AddExpoToken($token: String!) {
+        addExpoToken(token: $token) {
+            id
+            token
+            playerUsername
+            createdAt
+            updatedAt
+        }
+    }
+`;
 export const createPlayer = /* GraphQL */ `
     mutation CreatePlayer($input: CreatePlayerInput!, $condition: ModelPlayerConditionInput) {
         createPlayer(input: $input, condition: $condition) {
