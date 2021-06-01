@@ -16,7 +16,6 @@ const addExpoToken = gql`
 const initNotifications = async (): Promise<void> => {
     if (Constants.isDevice) {
         const { status: existingStatus } = await Notifications.getPermissionsAsync();
-        console.log("existingStatus: ", existingStatus);
         let finalStatus = existingStatus;
 
         if (existingStatus !== "granted") {
@@ -28,9 +27,8 @@ const initNotifications = async (): Promise<void> => {
             return;
         }
 
-        console.log("before tokenRes");
         const tokenRes = await Notifications.getExpoPushTokenAsync();
-        console.log("after tokenRes: ", tokenRes);
+        console.log("tokenRes: ", tokenRes);
 
         try {
             await API.graphql(
