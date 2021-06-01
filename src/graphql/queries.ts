@@ -28,6 +28,9 @@ export const listPlayers = /* GraphQL */ `
                 games {
                     nextToken
                 }
+                token {
+                    nextToken
+                }
             }
             nextToken
         }
@@ -50,6 +53,16 @@ export const getPlayer = /* GraphQL */ `
                     gameID
                     playerUsername
                     owners
+                    updatedAt
+                }
+                nextToken
+            }
+            token {
+                items {
+                    id
+                    token
+                    playerUsername
+                    createdAt
                     updatedAt
                 }
                 nextToken
@@ -81,6 +94,9 @@ export const searchPlayers = /* GraphQL */ `
                 createdAt
                 updatedAt
                 games {
+                    nextToken
+                }
+                token {
                     nextToken
                 }
             }
@@ -133,6 +149,43 @@ export const getGame = /* GraphQL */ `
                 }
                 nextToken
             }
+        }
+    }
+`;
+export const getExpoToken = /* GraphQL */ `
+    query GetExpoToken($token: String!) {
+        getExpoToken(token: $token) {
+            id
+            token
+            playerUsername
+            createdAt
+            updatedAt
+        }
+    }
+`;
+export const listExpoTokens = /* GraphQL */ `
+    query ListExpoTokens(
+        $token: String
+        $filter: ModelExpoTokenFilterInput
+        $limit: Int
+        $nextToken: String
+        $sortDirection: ModelSortDirection
+    ) {
+        listExpoTokens(
+            token: $token
+            filter: $filter
+            limit: $limit
+            nextToken: $nextToken
+            sortDirection: $sortDirection
+        ) {
+            items {
+                id
+                token
+                playerUsername
+                createdAt
+                updatedAt
+            }
+            nextToken
         }
     }
 `;

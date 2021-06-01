@@ -59,6 +59,22 @@ export type Player = {
   createdAt?: string,
   updatedAt?: string,
   games?: ModelPlayerGameConnection,
+  token?: ModelExpoTokenConnection,
+};
+
+export type ModelExpoTokenConnection = {
+  __typename: "ModelExpoTokenConnection",
+  items?:  Array<ExpoToken | null > | null,
+  nextToken?: string | null,
+};
+
+export type ExpoToken = {
+  __typename: "ExpoToken",
+  id?: string,
+  token?: string,
+  playerUsername?: string,
+  createdAt?: string,
+  updatedAt?: string,
 };
 
 export type GameData = {
@@ -179,25 +195,10 @@ export type GetPlayerQuery = {
   } | null,
 };
 
-export type onUpdateGameByIdSubscriptionVariables = {
-  id?: string,
-};
-
-export type onUpdateGameByIdSubscription = {
-  onUpdateGameById?:  {
-    __typename: "Game",
-    id: string,
-    status: GameStatus,
-    turn: string,
-    state: Array< Symbol | null >,
-    winner?: string | null,
-  } | null,
-};
-
 export type searchPlayersQueryVariables = {
-  limit?: number | null,
-  nextToken?: string | null,
-  searchString?: string | null,
+  limit: number | null,
+  nextToken: string | null,
+  searchString: string | null,
 };
 
 export type searchPlayersQuery = {
@@ -209,5 +210,20 @@ export type searchPlayersQuery = {
       username: string,
     } | null > | null,
     nextToken: string | null,
+  } | null,
+};
+
+export type onUpdateGameByIdSubscriptionVariables = {
+  id?: string,
+};
+
+export type onUpdateGameByIdSubscription = {
+  onUpdateGameById?:  {
+    __typename: "Game",
+    id: string,
+    status: GameStatus,
+    turn: string,
+    state: Array< Symbol | null >,
+    winner: string | null,
   } | null,
 };
