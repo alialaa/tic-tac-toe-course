@@ -138,9 +138,9 @@ exports.handler = async event => {
     const expo = new Expo();
     const messages = [];
     for (let pushToken of inviteeTokens) {
-        if (!Expo.isExpoPushToken(pushToken.token)) {
-            continue;
-        }
+        // if (!Expo.isExpoPushToken(pushToken.token)) {
+        //     continue;
+        // }
         messages.push({
             to: pushToken.token,
             sound: "default",
@@ -165,6 +165,38 @@ exports.handler = async event => {
             }
         } catch (error) {
             //report
+        }
+    }
+
+    console.log("#########tickets: ", tickets);
+
+    for (let ticketObj of tickets) {
+        const ticket = ticketObj.ticket;
+        const expoToken = ticketObj.expoToken;
+        if (ticket.status === "error") {
+            if (
+                ticket.details &&
+                ticket.details.error &&
+                ticket.details.error === "DeviceNotRegistered"
+            ) {
+                const deleteExpoToken = gql`
+                    mutation deleteExpoToken($token: String!) {
+                        deleteExpoToken(input: { token: $token }) {
+                            token
+                        }
+                    }
+                `;
+                try {
+                    await graphqlClient.mutate({
+                        mutation: deleteExpoToken,
+                        variables: {
+                            token: expoToken
+                        }
+                    });
+                } catch {
+                    //report
+                }
+            }
         }
     }
 
