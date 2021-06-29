@@ -28,7 +28,6 @@ const initNotifications = async (): Promise<void> => {
         }
 
         const tokenRes = await Notifications.getExpoPushTokenAsync();
-        console.log("tokenRes: ", tokenRes);
 
         try {
             await API.graphql(
