@@ -168,8 +168,6 @@ exports.handler = async event => {
         }
     }
 
-    console.log("#########tickets: ", tickets);
-
     for (let ticketObj of tickets) {
         const ticket = ticketObj.ticket;
         const expoToken = ticketObj.expoToken;
