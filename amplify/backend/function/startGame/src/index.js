@@ -7,6 +7,7 @@
 Amplify Params - DO NOT EDIT */
 const appsync = require("aws-appsync");
 const gql = require("graphql-tag");
+const { Expo } = require("expo-server-sdk");
 require("cross-fetch/polyfill");
 
 exports.handler = async event => {
@@ -32,6 +33,11 @@ exports.handler = async event => {
         query getPlayer($username: String!) {
             getPlayer(username: $username) {
                 id
+                tokens {
+                    items {
+                        token
+                    }
+                }
             }
         }
     `;
@@ -128,6 +134,39 @@ exports.handler = async event => {
     });
 
     //4. Send a push notification to the invitee
+    const inviteeTokens = inviteeResponse.data.getPlayer.tokens.items;
+    const expo = new Expo();
+    const messages = [];
+    for (let pushToken of inviteeTokens) {
+        if (!Expo.isExpoPushToken(pushToken.token)) {
+            continue;
+        }
+        messages.push({
+            to: pushToken.token,
+            sound: "default",
+            bodu: `${initiator} invited you to play a game!`,
+            data: { gameId: gameResponse.data.createGame.id },
+            badge: 1
+        });
+    }
+
+    const chunks = expo.chunkPushNotifications(messages);
+    const tickets = [];
+    for (let chunk of chunks) {
+        try {
+            const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+            for (let index = 0; index < ticketChunk.length; index++) {
+                const ticket = ticketChunk[index];
+                const expoToken = chunk[index].to;
+                tickets.push({
+                    expoToken,
+                    ticket
+                });
+            }
+        } catch (error) {
+            //report
+        }
+    }
 
     return {
         id: gameResponse.data.createGame.id,

@@ -44,7 +44,7 @@ type Player
     name: String!
     email: AWSEmail!
     games: [PlayerGame] @connection(keyName: "byPlayer", fields: ["username"])
-    token: [ExpoToken] @connection(keyName: "byPlayer", fields: ["username"])
+    tokens: [ExpoToken] @connection(keyName: "byPlayer", fields: ["username"])
 }
 
 type PlayerGame

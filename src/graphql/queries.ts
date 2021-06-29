@@ -2,6 +2,40 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getPlayer = /* GraphQL */ `
+    query GetPlayer($username: String!) {
+        getPlayer(username: $username) {
+            id
+            cognitoID
+            username
+            name
+            email
+            createdAt
+            updatedAt
+            games {
+                items {
+                    id
+                    createdAt
+                    gameID
+                    playerUsername
+                    owners
+                    updatedAt
+                }
+                nextToken
+            }
+            tokens {
+                items {
+                    id
+                    token
+                    playerUsername
+                    createdAt
+                    updatedAt
+                }
+                nextToken
+            }
+        }
+    }
+`;
 export const listPlayers = /* GraphQL */ `
     query ListPlayers(
         $username: String
@@ -28,45 +62,11 @@ export const listPlayers = /* GraphQL */ `
                 games {
                     nextToken
                 }
-                token {
+                tokens {
                     nextToken
                 }
             }
             nextToken
-        }
-    }
-`;
-export const getPlayer = /* GraphQL */ `
-    query GetPlayer($username: String!) {
-        getPlayer(username: $username) {
-            id
-            cognitoID
-            username
-            name
-            email
-            createdAt
-            updatedAt
-            games {
-                items {
-                    id
-                    createdAt
-                    gameID
-                    playerUsername
-                    owners
-                    updatedAt
-                }
-                nextToken
-            }
-            token {
-                items {
-                    id
-                    token
-                    playerUsername
-                    createdAt
-                    updatedAt
-                }
-                nextToken
-            }
         }
     }
 `;
@@ -96,33 +96,12 @@ export const searchPlayers = /* GraphQL */ `
                 games {
                     nextToken
                 }
-                token {
+                tokens {
                     nextToken
                 }
             }
             nextToken
             total
-        }
-    }
-`;
-export const listGames = /* GraphQL */ `
-    query ListGames($filter: ModelGameFilterInput, $limit: Int, $nextToken: String) {
-        listGames(filter: $filter, limit: $limit, nextToken: $nextToken) {
-            items {
-                id
-                status
-                owners
-                initiator
-                turn
-                state
-                winner
-                createdAt
-                updatedAt
-                players {
-                    nextToken
-                }
-            }
-            nextToken
         }
     }
 `;
@@ -149,6 +128,27 @@ export const getGame = /* GraphQL */ `
                 }
                 nextToken
             }
+        }
+    }
+`;
+export const listGames = /* GraphQL */ `
+    query ListGames($filter: ModelGameFilterInput, $limit: Int, $nextToken: String) {
+        listGames(filter: $filter, limit: $limit, nextToken: $nextToken) {
+            items {
+                id
+                status
+                owners
+                initiator
+                turn
+                state
+                winner
+                createdAt
+                updatedAt
+                players {
+                    nextToken
+                }
+            }
+            nextToken
         }
     }
 `;

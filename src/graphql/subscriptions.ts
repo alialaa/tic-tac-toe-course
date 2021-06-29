@@ -49,7 +49,7 @@ export const onCreatePlayer = /* GraphQL */ `
                 }
                 nextToken
             }
-            token {
+            tokens {
                 items {
                     id
                     token
@@ -83,7 +83,7 @@ export const onUpdatePlayer = /* GraphQL */ `
                 }
                 nextToken
             }
-            token {
+            tokens {
                 items {
                     id
                     token
@@ -117,7 +117,7 @@ export const onDeletePlayer = /* GraphQL */ `
                 }
                 nextToken
             }
-            token {
+            tokens {
                 items {
                     id
                     token
@@ -150,7 +150,7 @@ export const onCreatePlayerGame = /* GraphQL */ `
                 games {
                     nextToken
                 }
-                token {
+                tokens {
                     nextToken
                 }
             }
@@ -191,7 +191,7 @@ export const onUpdatePlayerGame = /* GraphQL */ `
                 games {
                     nextToken
                 }
-                token {
+                tokens {
                     nextToken
                 }
             }
@@ -232,7 +232,7 @@ export const onDeletePlayerGame = /* GraphQL */ `
                 games {
                     nextToken
                 }
-                token {
+                tokens {
                     nextToken
                 }
             }
