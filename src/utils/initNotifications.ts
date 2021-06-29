@@ -1,6 +1,17 @@
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import { Platform } from "react-native";
+import gql from "graphql-tag";
+import { API, graphqlOperation } from "aws-amplify";
+
+const addExpoToken = gql`
+    mutation addExpoToken($token: String!) {
+        addExpoToken(token: $token) {
+            playerUsername
+            token
+        }
+    }
+`;
 
 const initNotifications = async (): Promise<void> => {
     if (Constants.isDevice) {
@@ -18,6 +29,17 @@ const initNotifications = async (): Promise<void> => {
 
         const tokenRes = await Notifications.getExpoPushTokenAsync();
         console.log("tokenRes: ", tokenRes);
+
+        try {
+            await API.graphql(
+                graphqlOperation(addExpoToken, {
+                    token: tokenRes.data
+                })
+            );
+        } catch (error) {
+            console.log(error);
+            //report
+        }
 
         if (Platform.OS === "android") {
             Notifications.setNotificationChannelAsync("default", {
