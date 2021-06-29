@@ -27,8 +27,8 @@ export default function AppBootstrap({ children }: AppBootstrapProps): ReactElem
             try {
                 const user = await Auth.currentAuthenticatedUser();
                 setUser(user);
-            } catch (error) {
                 initNotifications();
+            } catch (error) {
                 setUser(null);
             }
             setAuthLoaded(true);
@@ -44,8 +44,8 @@ export default function AppBootstrap({ children }: AppBootstrapProps): ReactElem
                     break;
                 case "signIn":
                     setUser(data);
-                    break;
                     initNotifications();
+                    break;
                 default:
                     break;
             }
