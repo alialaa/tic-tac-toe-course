@@ -189,3 +189,30 @@ export const listExpoTokens = /* GraphQL */ `
         }
     }
 `;
+export const getExpoTicketsObject = /* GraphQL */ `
+    query GetExpoTicketsObject($id: ID!) {
+        getExpoTicketsObject(id: $id) {
+            id
+            tickets
+            createdAt
+            updatedAt
+        }
+    }
+`;
+export const listExpoTicketsObjects = /* GraphQL */ `
+    query ListExpoTicketsObjects(
+        $filter: ModelExpoTicketsObjectFilterInput
+        $limit: Int
+        $nextToken: String
+    ) {
+        listExpoTicketsObjects(filter: $filter, limit: $limit, nextToken: $nextToken) {
+            items {
+                id
+                tickets
+                createdAt
+                updatedAt
+            }
+            nextToken
+        }
+    }
+`;

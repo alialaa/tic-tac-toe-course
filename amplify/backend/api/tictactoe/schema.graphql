@@ -111,3 +111,10 @@ type ExpoToken
     token: String!
     playerUsername: String!
 }
+
+type ExpoTicketsObject
+    @model
+    @auth(rules: [{ allow: private, provider: iam, operations: [read, create, update, delete] }]) {
+    id: ID!
+    tickets: AWSJSON!
+}

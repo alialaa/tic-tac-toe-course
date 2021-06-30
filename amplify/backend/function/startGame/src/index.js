@@ -168,6 +168,8 @@ exports.handler = async event => {
         }
     }
 
+    const ticketIds = {};
+
     for (let ticketObj of tickets) {
         const ticket = ticketObj.ticket;
         const expoToken = ticketObj.expoToken;
@@ -195,6 +197,32 @@ exports.handler = async event => {
                     //report
                 }
             }
+        }
+        if (ticket.id) {
+            ticketIds[ticket.id] = expoToken;
+        }
+    }
+
+    console.log("########ticketIds: ", ticketIds);
+
+    if (Object.keys(ticketIds).length !== 0) {
+        const createExpoTicketsObject = gql`
+            mutation createExpoTicketsObject($tickets: AWSJSON!) {
+                createExpoTicketsObject(input: { tickets: $tickets }) {
+                    id
+                    tickets
+                }
+            }
+        `;
+        try {
+            await graphqlClient.mutate({
+                mutation: createExpoTicketsObject,
+                variables: {
+                    tickets: JSON.stringify(ticketIds)
+                }
+            });
+        } catch (error) {
+            //report
         }
     }
 

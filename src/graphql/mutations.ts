@@ -389,3 +389,42 @@ export const deleteExpoToken = /* GraphQL */ `
         }
     }
 `;
+export const createExpoTicketsObject = /* GraphQL */ `
+    mutation CreateExpoTicketsObject(
+        $input: CreateExpoTicketsObjectInput!
+        $condition: ModelExpoTicketsObjectConditionInput
+    ) {
+        createExpoTicketsObject(input: $input, condition: $condition) {
+            id
+            tickets
+            createdAt
+            updatedAt
+        }
+    }
+`;
+export const updateExpoTicketsObject = /* GraphQL */ `
+    mutation UpdateExpoTicketsObject(
+        $input: UpdateExpoTicketsObjectInput!
+        $condition: ModelExpoTicketsObjectConditionInput
+    ) {
+        updateExpoTicketsObject(input: $input, condition: $condition) {
+            id
+            tickets
+            createdAt
+            updatedAt
+        }
+    }
+`;
+export const deleteExpoTicketsObject = /* GraphQL */ `
+    mutation DeleteExpoTicketsObject(
+        $input: DeleteExpoTicketsObjectInput!
+        $condition: ModelExpoTicketsObjectConditionInput
+    ) {
+        deleteExpoTicketsObject(input: $input, condition: $condition) {
+            id
+            tickets
+            createdAt
+            updatedAt
+        }
+    }
+`;
