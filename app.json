@@ -17,7 +17,10 @@
         "ios": {
             "supportsTablet": true,
             "bundleIdentifier": "com.alialaa.tictactoe",
-            "buildNumber": "1.0.0"
+            "buildNumber": "1.0.0",
+            "config": {
+                "googleMobileAdsAppId": "ca-app-pub-2856634516763751~2907111935"
+            }
         },
         "android": {
             "adaptiveIcon": {
@@ -26,7 +29,10 @@
             },
             "package": "com.alialaa.tictactoe",
             "versionCode": 1,
-            "googleServicesFile": "./google-services.json"
+            "googleServicesFile": "./google-services.json",
+            "config": {
+                "googleMobileAdsAppId": "ca-app-pub-2856634516763751~4661131018"
+            }
         },
         "web": {
             "favicon": "./assets/favicon.png"

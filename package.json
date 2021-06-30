@@ -31,6 +31,7 @@
         "aws-amplify": "^3.3.22",
         "aws-amplify-react-native": "^4.3.1",
         "expo": "^41.0.0",
+        "expo-ads-admob": "^10.0.4",
         "expo-app-loading": "^1.0.3",
         "expo-av": "~9.1.2",
         "expo-font": "~9.1.0",

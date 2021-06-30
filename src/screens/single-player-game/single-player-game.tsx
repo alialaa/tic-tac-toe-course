@@ -1,10 +1,23 @@
 import React, { ReactElement, useState, useEffect } from "react";
-import { SafeAreaView, View, Dimensions } from "react-native";
+import { SafeAreaView, View, Dimensions, Platform } from "react-native";
 import { GradientBackground, Text } from "@components";
 import styles from "./single-player-game.styles";
 import { Board, Button } from "@components";
 import { isEmpty, BoardState, isTerminal, getBestMove, Cell, useSounds } from "@utils";
 import { useSettings, difficulties } from "@contexts/settings-context";
+import { AdMobInterstitial, setTestDeviceIDAsync } from "expo-ads-admob";
+import Constants from "expo-constants";
+
+setTestDeviceIDAsync("EMULATOR");
+
+AdMobInterstitial.addEventListener("interstitialWillLeaveApplication", () => {
+    console.log("left app");
+});
+
+const addUnitID = Platform.select({
+    ios: Constants.isDevice && !__DEV__ ? "real_id" : "ca-app-pub-3940256099942544/4411468910",
+    android: Constants.isDevice && !__DEV__ ? "real_id" : "ca-app-pub-3940256099942544/1033173712"
+});
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 
@@ -62,6 +75,19 @@ export default function Game(): ReactElement {
         setTurn(Math.random() < 0.5 ? "HUMAN" : "BOT");
     };
 
+    const showAd = async () => {
+        if (!addUnitID) return;
+        try {
+            await AdMobInterstitial.setAdUnitID(addUnitID);
+            await AdMobInterstitial.requestAdAsync({
+                servePersonalizedAds: true
+            });
+            await AdMobInterstitial.showAdAsync();
+        } catch (error) {
+            //report
+        }
+    };
+
     useEffect(() => {
         if (gameResult) {
             const winner = getWinner(gameResult.winner);
@@ -76,6 +102,10 @@ export default function Game(): ReactElement {
             if (winner === "DRAW") {
                 playSound("draw");
                 setGamesCount({ ...gamesCount, draws: gamesCount.draws + 1 });
+            }
+            const totalGames = gamesCount.wins + gamesCount.draws + gamesCount.losses;
+            if (totalGames % 3 === 0) {
+                showAd();
             }
         } else {
             if (turn === "BOT") {
