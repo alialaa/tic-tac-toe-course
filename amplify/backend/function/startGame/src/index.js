@@ -138,9 +138,9 @@ exports.handler = async event => {
     const expo = new Expo();
     const messages = [];
     for (let pushToken of inviteeTokens) {
-        // if (!Expo.isExpoPushToken(pushToken.token)) {
-        //     continue;
-        // }
+        if (!Expo.isExpoPushToken(pushToken.token)) {
+            continue;
+        }
         messages.push({
             to: pushToken.token,
             sound: "default",

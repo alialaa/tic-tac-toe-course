@@ -22,6 +22,22 @@ const ticketsQuery = gql`
     }
 `;
 
+const deleteExpoToken = gql`
+    mutation deleteExpoToken($token: String!) {
+        deleteExpoToken(input: { token: $token }) {
+            token
+        }
+    }
+`;
+
+const deleteExpoTicketsObject = gql`
+    mutation deleteExpoToken($id: ID!) {
+        deleteExpoTicketsObject(input: { id: $id }) {
+            id
+        }
+    }
+`;
+
 exports.handler = async event => {
     const graphqlClient = new appsync.AWSAppSyncClient({
         url: process.env.API_TICTACTOE_GRAPHQLAPIENDPOINTOUTPUT,
@@ -43,7 +59,49 @@ exports.handler = async event => {
 
     const ticketsObjects = ticketsRes.data.listExpoTicketsObjects.items;
     for (const ticketsObject of ticketsObjects) {
-        const ticket = JSON.parse(ticketsObject.tickets);
-        console.log("#@#@#@#@#@#@#@ticket: ", ticket);
+        const currentDate = new Date();
+        const ticketsObjectDate = new Date(ticketsObject.createdAt);
+        const timeDiff = (currentDate.getTime() - ticketsObjectDate.getTime()) / (1000 * 60 * 60);
+        if (timeDiff < 1) {
+            continue;
+        }
+
+        const tickets = JSON.parse(ticketsObject.tickets);
+        const expo = new Expo();
+        const receiptIdChunks = expo.chunkPushNotificationReceiptIds(Object.keys(tickets));
+        for (const chunk of receiptIdChunks) {
+            try {
+                const receipts = await expo.getPushNotificationReceiptsAsync(chunk);
+                for (let receiptId in receipts) {
+                    const { status, details } = receipts[receiptId];
+                    if (status === "error") {
+                        if (details && details.error && details.error === "DeviceNotRegistered") {
+                            try {
+                                await graphqlClient.mutate({
+                                    mutation: deleteExpoToken,
+                                    variables: {
+                                        token: tickets[receiptId]
+                                    }
+                                });
+                            } catch {
+                                //report
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                //report
+            }
+        }
+        try {
+            await graphqlClient.mutate({
+                mutation: deleteExpoTicketsObject,
+                variables: {
+                    id: ticketsObject.id
+                }
+            });
+        } catch (error) {
+            //report
+        }
     }
 };
