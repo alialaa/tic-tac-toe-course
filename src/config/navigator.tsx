@@ -1,5 +1,9 @@
-import React, { ReactElement } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import React, { ReactElement, useState, useEffect, useRef } from "react";
+import {
+    NavigationContainer,
+    NavigationContainerRef,
+    StackActions
+} from "@react-navigation/native";
 import { createStackNavigator, StackNavigationOptions } from "@react-navigation/stack";
 import {
     Home,
@@ -13,6 +17,8 @@ import {
     MultiplayerGame
 } from "@screens";
 import { colors } from "@utils";
+import { useAuth } from "@contexts/auth-context";
+import * as Notifications from "expo-notifications";
 
 export type StackNavigatorParams = {
     Home: undefined;
@@ -51,8 +57,41 @@ const navigatorOptions: StackNavigationOptions = {
 };
 
 export default function Navigator(): ReactElement {
+    const { user } = useAuth();
+    const navigatorRef = useRef<NavigationContainerRef | null>(null);
+    const [isNavigatorReady, setIsNavigatorReady] = useState(false);
+
+    useEffect(() => {
+        if (user && isNavigatorReady) {
+            const subscription = Notifications.addNotificationResponseReceivedListener(response => {
+                const gameID = response.notification.request.content.data.gameId;
+
+                if (navigatorRef.current?.getCurrentRoute()?.name === "MultiplayerGame") {
+                    navigatorRef.current.dispatch(
+                        StackActions.replace("MultiplayerGame", {
+                            gameID
+                        })
+                    );
+                } else {
+                    navigatorRef.current?.navigate("MultiplayerGame", {
+                        gameID
+                    });
+                }
+            });
+
+            return () => {
+                subscription.remove();
+            };
+        }
+    }, [user, isNavigatorReady]);
+
     return (
-        <NavigationContainer>
+        <NavigationContainer
+            ref={navigatorRef}
+            onReady={() => {
+                setIsNavigatorReady(true);
+            }}
+        >
             <Stack.Navigator screenOptions={navigatorOptions}>
                 <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
                 <Stack.Screen
