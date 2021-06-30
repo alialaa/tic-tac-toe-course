@@ -203,8 +203,6 @@ exports.handler = async event => {
         }
     }
 
-    console.log("########ticketIds: ", ticketIds);
-
     if (Object.keys(ticketIds).length !== 0) {
         const createExpoTicketsObject = gql`
             mutation createExpoTicketsObject($tickets: AWSJSON!) {
