@@ -9,6 +9,15 @@ import AppLoading from "expo-app-loading";
 import { Auth, Hub } from "aws-amplify";
 import { useAuth } from "@contexts/auth-context";
 import { initNotifications } from "@utils";
+import * as Notifications from "expo-notifications";
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false
+    })
+});
 
 type AppBootstrapProps = {
     children: ReactNode;

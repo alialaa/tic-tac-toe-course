@@ -15,6 +15,7 @@ import GameItem from "./game-item";
 import PlayersModal from "./players-modal/players-modal";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StackNavigatorParams } from "@config/navigator";
+import * as Notifications from "expo-notifications";
 
 type MultiplayerHomeScreenNavigationProp = StackNavigationProp<
     StackNavigatorParams,
@@ -56,6 +57,7 @@ export default function MultiplayerHome({ navigation }: MultiplayerHomeProps): R
                             : [...playerGames, ...newPlayerGames]
                     );
                     setNextToken(player.data.getPlayer.games.nextToken);
+                    Notifications.setBadgeCountAsync(0);
                 }
             } catch (error) {
                 Alert.alert("Error!", "An error has occurred!");
