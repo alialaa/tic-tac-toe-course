@@ -19,7 +19,7 @@
             "bundleIdentifier": "com.alialaa.tictactoe",
             "buildNumber": "1.0.0",
             "config": {
-                "googleMobileAdsAppId": "ca-app-pub-2856634516763751~2907111935"
+                "googleMobileAdsAppId": "ca-app-pub-3940256099942544~1458002511"
             }
         },
         "android": {
@@ -31,7 +31,7 @@
             "versionCode": 1,
             "googleServicesFile": "./google-services.json",
             "config": {
-                "googleMobileAdsAppId": "ca-app-pub-2856634516763751~4661131018"
+                "googleMobileAdsAppId": "ca-app-pub-3940256099942544~3347511713"
             }
         },
         "web": {
